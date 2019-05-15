@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.neu.School_Jobs.mapper.UserInfoMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.UserInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="question_result" jdbcType="VARCHAR" property="questionResult"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
+        <result column="identity_card" jdbcType="VARCHAR" property="identityCard"/>
+        <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber"/>
+        <result column="pay_password" jdbcType="VARCHAR" property="payPassword"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="autograph" jdbcType="VARCHAR" property="autograph"/>
+        <result column="show_me" jdbcType="BIT" property="showMe"/>
+    </resultMap>
+</mapper>

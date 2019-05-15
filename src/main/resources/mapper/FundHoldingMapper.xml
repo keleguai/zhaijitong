@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.neu.School_Jobs.mapper.FundHoldingMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.FundHolding">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="stock_ids" jdbcType="VARCHAR" property="stockIds"/>
+        <result column="worth_percent" jdbcType="VARCHAR" property="worthPercent"/>
+    </resultMap>
+
+    <resultMap id="StockResultMap" type="cn.edu.neu.School_Jobs.model.Stock">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="stock_id" jdbcType="VARCHAR" property="stockId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="opening_price" jdbcType="REAL" property="openingPrice"/>
+        <result column="stock_price" jdbcType="REAL" property="stockPrice"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+    </resultMap>
+
+    <select id="showStocks" parameterType="com.alibaba.fastjson.JSONObject" resultMap="StockResultMap">
+        select *
+        from stock
+        where instr((select stock_ids from fund_holding where fund_id=#{fundId}),stock_id)>0
+    </select>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.neu.School_Jobs.mapper.FundMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.Fund">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
+        <result column="manager_ids" jdbcType="VARCHAR" property="managerIds"/>
+        <result column="manager_names" jdbcType="VARCHAR" property="managerNames"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="sell_rate" jdbcType="VARCHAR" property="sellRate"/>
+        <result column="buying_rate" jdbcType="REAL" property="buyingRate"/>
+        <result column="hosting_fees" jdbcType="REAL" property="hostingFees"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="priority" jdbcType="INTEGER" property="priority"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+    </resultMap>
+
+    <select id="selectOrderByPriority" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM fund
+        ORDER BY priority LIMIT 4
+   </select>
+
+    <select id="selectByType" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM fund
+        WHERE type like CONCAT('%',#{type},'%')
+    </select>
+
+    <select id="selectByAll" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM fund
+        WHERE fund_id like CONCAT('%',#{regex},'%')
+        OR manager_names like CONCAT('%',#{regex},'%')
+        OR fund_name like CONCAT('%',#{regex},'%')
+    </select>
+
+    <select id="selectByDisStock" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        select *
+        from fund
+        where fund_id in
+        (select fund_id from fund_holding where stock_ids like (select concat("%",stock_id,"%") from stock where disappear=1))
+    </select>
+
+    <select id="selectByDisStockId" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        select *
+        from fund
+        where fund_id in
+        (select fund_id from fund_holding where stock_ids like (select concat("%",stock_id,"%") from stock where disappear=1 and stock_id = #{stockId}))
+    </select>
+</mapper>

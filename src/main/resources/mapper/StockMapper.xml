@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.neu.School_Jobs.mapper.StockMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.Stock">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="stock_id" jdbcType="VARCHAR" property="stockId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="opening_price" jdbcType="REAL" property="openingPrice"/>
+        <result column="stock_price" jdbcType="REAL" property="stockPrice"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+    </resultMap>
+    <select id="selectByDisappear" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM stock
+        WHERE disappear = 1
+    </select>
+</mapper>
