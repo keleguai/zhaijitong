@@ -12,6 +12,9 @@ import java.util.List;
 public interface SellOrderService extends Service<SellOrder> {
     HashMap selectHasSellMoney(int userId);
 
-    List<SellOrder> selectByUserId(int userId);
+    List<SellOrder> findOrdersWithFundInfo(int userId);
 
+    List<SellOrder> findHistoryOrder(int day, int userId, int confirmSign);
+
+    SellOrder initialSellOrder(SellOrder sellOrder,int userId);
 }

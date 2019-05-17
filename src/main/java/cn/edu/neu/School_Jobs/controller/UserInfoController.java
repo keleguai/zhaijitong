@@ -2,23 +2,29 @@ package cn.edu.neu.School_Jobs.controller;
 
 import cn.edu.neu.School_Jobs.model.UserInfo;
 import cn.edu.neu.School_Jobs.service.UserInfoService;
+import cn.edu.neu.School_Jobs.util.Encryptor;
 import cn.edu.neu.School_Jobs.util.Jwt;
 import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
 
+import java.io.*;
 import java.util.List;
 
 import cn.edu.neu.School_Jobs.util.CommonUtil;
 import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * created by fzb on 2019/05/10.
+ */
 @RestController
 @RequestMapping("/user_info")
 public class UserInfoController {
@@ -33,11 +39,22 @@ public class UserInfoController {
         PageHelper.startPage(pageNum, pageSize);
         List<UserInfo> list = userInfoService.findAll();
         PageInfo pageInfo = new PageInfo(list);
-
         return CommonUtil.successJson(pageInfo);
     }
 
 
+    // 得到该客户的收益率
+    @GetMapping("/me/get_rate")
+    public JSONObject getRate(HttpServletRequest request) {
+        int userId = Jwt.getUserId(request);
+        // 将客户的收益率封装成字典
+        JSONObject jsonObject = new JSONObject();
+        Float rate = userInfoService.getHistoryRate(userId, 500);
+        jsonObject.put("rate", rate);
+        return CommonUtil.successJson(jsonObject);
+    }
+
+    // 得到个人信息
     @GetMapping("/me")
     public JSONObject getMe(HttpServletRequest request) {
         int uid = Jwt.getUserId(request);
@@ -53,38 +70,43 @@ public class UserInfoController {
 
     @PostMapping("/add")
     public JSONObject addUserInfo(@RequestBody JSONObject requestJson, HttpServletRequest request) {
-        //try{
-        //CommonUtil.hasAllRequired(requestJson, "name,description");
-        //}catch (CommonJsonException e){
-        //  return e.getResultJson();
-        //}
-
         UserInfo userInfo = JSONObject.toJavaObject(requestJson, UserInfo.class);
-        userInfo.setUserId(Jwt.getUserId(request));
-        userInfo.setPhotoUrl(Jwt.getUserId(request) + ".jpg");
+        int userId = Jwt.getUserId(request);
+        String photoUrl = userInfoService.getEncryPhotoUrl(userId);
+        userInfo.setUserId(userId);
+        userInfo.setPhotoUrl("/static/" + photoUrl);
         userInfoService.save(userInfo);
         return CommonUtil.successJson();
     }
 
     @PostMapping("/update")
     public JSONObject updateUserInfo(@RequestBody JSONObject requestJson, HttpServletRequest request) {
-        //try{
-        //  CommonUtil.hasAllRequired(requestJson, "name,description");
-        //}catch (CommonJsonException e){
-        //    return e.getResultJson();
-        //}
-
+        int userId = Jwt.getUserId(request);
+        String photoUrl = userInfoService.getEncryPhotoUrl(userId);
         UserInfo userInfo = JSONObject.toJavaObject(requestJson, UserInfo.class);
+        userInfo.setPhotoUrl("/static/" + photoUrl);
         userInfo.setUserId(Jwt.getUserId(request));
         userInfoService.update(userInfo);
         return CommonUtil.successJson();
     }
 
+    // 上传头像
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public JSONObject upload(HttpServletRequest request, @RequestParam("file") MultipartFile picture) throws IOException {
+        int userId = Jwt.getUserId(request);
+        String photoUrl = userInfoService.getEncryPhotoUrl(userId);
+        File f = new File("c:/users/cole/desktop/fund/static/" + photoUrl);
+        BufferedOutputStream out = null;
+        out = new BufferedOutputStream(new FileOutputStream(f));
+        out.write(picture.getBytes());
+        out.flush();
+        out.close();
+        return CommonUtil.successJson();
+    }
+
     @DeleteMapping("/delete/{id}")
     public JSONObject deleteUserInfo(@PathVariable(value = "id") int id) {
-
         userInfoService.deleteById(id);
-
         return CommonUtil.successJson();
     }
 

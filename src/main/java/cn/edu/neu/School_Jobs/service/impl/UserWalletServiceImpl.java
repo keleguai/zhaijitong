@@ -4,8 +4,8 @@ import cn.edu.neu.School_Jobs.mapper.UserWalletMapper;
 import cn.edu.neu.School_Jobs.model.UserWallet;
 import cn.edu.neu.School_Jobs.service.UserWalletService;
 import cn.edu.neu.School_Jobs.util.AbstractService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * created by fzb on 2019/05/10.

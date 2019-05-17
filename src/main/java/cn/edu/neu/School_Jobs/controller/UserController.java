@@ -23,7 +23,9 @@ import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * created by fzb on 2019/05/10.
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {

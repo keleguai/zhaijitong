@@ -1,13 +1,12 @@
 package cn.edu.neu.School_Jobs.vo;
 
-import javax.persistence.*;
-import java.util.Date;
+import cn.edu.neu.School_Jobs.model.BuyOrder;
 
-public class SellFundJoinVo {
-    @Id
-    @Column(name = "fund_id")
-    private String fundId;
+import javax.persistence.Column;
+import javax.persistence.Table;
 
+@Table(name = "buy_order")
+public class BuyOrderJoinFundVo extends BuyOrder {
     @Column(name = "fund_name")
     private String fundName;
 
@@ -35,149 +34,6 @@ public class SellFundJoinVo {
     private Boolean disappear;
 
     private String photo;
-
-    @Id
-    @Column(name = "order_id")
-    private Integer orderId;
-
-    @Column(name = "user_id")
-    private Integer userId;
-
-
-    @Column(name = "sell_time")
-    private Date sellTime;
-
-    @Column(name = "sell_share")
-    private Float sellShare;
-
-    @Column(name = "sure_net")
-    private Float sureNet;
-
-    @Column(name = "service_charge")
-    private Float serviceCharge;
-
-    @Column(name = "confirm_sign")
-    private Boolean confirmSign;
-
-    /**
-     * @return order_id
-     */
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    /**
-     * @param orderId
-     */
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    /**
-     * @return user_id
-     */
-    public Integer getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId
-     */
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * @return fund_id
-     */
-
-    /**
-     * @param fundId
-     */
-
-    /**
-     * @return sell_time
-     */
-    public Date getSellTime() {
-        return sellTime;
-    }
-
-    /**
-     * @param sellTime
-     */
-    public void setSellTime(Date sellTime) {
-        this.sellTime = sellTime;
-    }
-
-    /**
-     * @return sell_share
-     */
-    public Float getSellShare() {
-        return sellShare;
-    }
-
-    /**
-     * @param sellShare
-     */
-    public void setSellShare(Float sellShare) {
-        this.sellShare = sellShare;
-    }
-
-    /**
-     * @return sure_net
-     */
-    public Float getSureNet() {
-        return sureNet;
-    }
-
-    /**
-     * @param sureNet
-     */
-    public void setSureNet(Float sureNet) {
-        this.sureNet = sureNet;
-    }
-
-    /**
-     * @return service_charge
-     */
-    public Float getServiceCharge() {
-        return serviceCharge;
-    }
-
-    /**
-     * @param serviceCharge
-     */
-    public void setServiceCharge(Float serviceCharge) {
-        this.serviceCharge = serviceCharge;
-    }
-
-    /**
-     * @return confirm_sign
-     */
-    public Boolean getConfirmSign() {
-        return confirmSign;
-    }
-
-    /**
-     * @param confirmSign
-     */
-    public void setConfirmSign(Boolean confirmSign) {
-        this.confirmSign = confirmSign;
-    }
-
-    /**
-     * @return fund_id
-     */
-    public String getFundId() {
-        return fundId;
-    }
-
-    /**
-     * @param fundId
-     */
-    public void setFundId(String fundId) {
-        this.fundId = fundId;
-    }
 
     /**
      * @return fund_name

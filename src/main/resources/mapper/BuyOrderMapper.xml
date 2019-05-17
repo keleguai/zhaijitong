@@ -17,10 +17,7 @@
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
     </resultMap>
 
-    <resultMap id="BuyFundResult" type="cn.edu.neu.School_Jobs.vo.BuyFundJoinVo">
-        <!--
-          WARNING - @mbg.generated
-        -->
+    <resultMap id="BuyOrderLeftJoinResult" type="cn.edu.neu.School_Jobs.vo.BuyOrderJoinFundVo">
         <id column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
@@ -48,9 +45,60 @@
         <result column="sum_buy" jdbcType="REAL" property="sumBuy"/>
     </resultMap>
 
+    <resultMap id="HistoryOrderInfo" type="java.util.HashMap">
+        <result column="amount" jdbcType="REAL" property="amount"/>
+        <result column="remain_share" jdbcType="REAL" property="remainMoney"/>
+    </resultMap>
+
+    <resultMap id="BuyOrderJoinHistoryFundJoinFund" type="cn.edu.neu.School_Jobs.vo.BuyOrderJoinHistoryFundJoinFundVo">
+        <id column="order_id" jdbcType="INTEGER" property="orderId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="all_money" jdbcType="REAL" property="allMoney"/>
+        <result column="this_fund_share" jdbcType="REAL" property="thisFundShare"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="time_buying" jdbcType="TIMESTAMP" property="timeBuying"/>
+        <result column="transaction_amount" jdbcType="REAL" property="transactionAmount"/>
+        <result column="confirm_the_net" jdbcType="REAL" property="confirmTheNet"/>
+        <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
+        <result column="residual_share" jdbcType="REAL" property="residualShare"/>
+        <result column="time_confirm" jdbcType="DATE" property="timeConfirm"/>
+        <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
+        <result column="manager_ids" jdbcType="VARCHAR" property="managerIds"/>
+        <result column="manager_names" jdbcType="VARCHAR" property="managerNames"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="sell_rate" jdbcType="VARCHAR" property="sellRate"/>
+        <result column="buying_rate" jdbcType="REAL" property="buyingRate"/>
+        <result column="hosting_fees" jdbcType="REAL" property="hostingFees"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="priority" jdbcType="INTEGER" property="priority"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
+        <result column="date" jdbcType="LONGVARCHAR" property="date"/>
+        <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
+    </resultMap>
+
+
+    <select id="findHistoryOrder" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM buy_order
+        where
+        DATE_SUB(CURDATE(), INTERVAL #{day} DAY) &lt;= time_buying
+        AND
+        user_id =#{userId}
+        AND
+        confirm_sign = #{confirmSign}
+    </select>
+
     <!--找出全部买的订单-->
-    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BuyFundResult">
-    select * from buy_order left join fund on fund.fund_id=buy_order.fund_id where user_id=#{userId} order by time_buying DESC
+    <select id="findOrdersWithFundInfo" parameterType="java.lang.Integer" resultMap="BuyOrderLeftJoinResult">
+    select *
+    from buy_order
+    left join fund
+    on fund.fund_id=buy_order.fund_id
+    where user_id=#{userId}
+    order by time_buying DESC
   </select>
 
     <select id="getSumByBuyMoney" parameterType="java.lang.Integer" resultMap="BuySumAmount">
@@ -62,8 +110,38 @@
     select sum(confirm_the_net*residual_share-service_charge) as sum_buy from buy_order where user_id = #{userId} and confirm_sign=1 group by user_id
   </select>
 
+    <!--得到所有金额的钱-->
     <select id="getSumByNetMoneyAndFid" parameterType="java.lang.Integer" resultMap="BuySumAmount">
-    select sum(confirm_the_net*residual_share-service_charge) as sum_buy from buy_order where user_id = #{userId} and confirm_sign=1 and fund_id=#{fundId} group by user_id
+    select
+    sum(confirm_the_net*residual_share-service_charge) as sum_buy
+    from buy_order
+    where user_id = #{userId}
+    and confirm_sign=1
+    and fund_id=#{fundId}
+    group by user_id
   </select>
+
+    <select id="findAllHasBuyFund" parameterType="java.lang.Integer" resultMap="BuyOrderJoinHistoryFundJoinFund">
+    select * from
+    (select thisFund.all_money,thisFund.this_fund_share,fund.* from
+    (select * from
+    (select sum(residual_share*confirm_the_net) as will_money,sum(residual_share) as this_fund_share,sum(transaction_amount) as all_money,fund_id
+    from buy_order
+    where user_id=#{userId}
+    and confirm_sign=1
+    group by fund_id)thisFund
+    where thisFund.this_fund_share>0)thisFund
+    left join fund on fund.fund_id=thisFund.fund_id)thisFund
+    left join historical_fund on historical_fund.fund_id=thisFund.fund_id
+  </select>
+
+    <select id="findOneFundOrders" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM buy_order
+        WHERE fund_id=#{fundId}
+        AND confirm_sign=1
+        AND user_id=#{userId}
+        ORDER time_buying
+    </select>
 
 </mapper>

@@ -1,10 +1,41 @@
 package cn.edu.neu.School_Jobs.vo;
 
-import java.util.Date;
 import javax.persistence.*;
+import java.util.Date;
 
-@Table(name = "buy_order")
-public class BuyFundJoinVo {
+public class SellOrderJoinFundVo {
+    @Id
+    @Column(name = "fund_id")
+    private String fundId;
+
+    @Column(name = "fund_name")
+    private String fundName;
+
+    @Column(name = "manager_ids")
+    private String managerIds;
+
+    @Column(name = "manager_names")
+    private String managerNames;
+
+    private String time;
+
+    @Column(name = "sell_rate")
+    private String sellRate;
+
+    @Column(name = "buying_rate")
+    private Float buyingRate;
+
+    @Column(name = "hosting_fees")
+    private Float hostingFees;
+
+    private String type;
+
+    private Integer priority;
+
+    private Boolean disappear;
+
+    private String photo;
+
     @Id
     @Column(name = "order_id")
     private Integer orderId;
@@ -12,26 +43,18 @@ public class BuyFundJoinVo {
     @Column(name = "user_id")
     private Integer userId;
 
-    @Column(name = "fund_id")
-    private String fundId;
 
-    @Column(name = "time_buying")
-    private Date timeBuying;
+    @Column(name = "sell_time")
+    private Date sellTime;
 
-    @Column(name = "transaction_amount")
-    private Float transactionAmount;
+    @Column(name = "sell_share")
+    private Float sellShare;
 
-    @Column(name = "confirm_the_net")
-    private Float confirmTheNet;
+    @Column(name = "sure_net")
+    private Float sureNet;
 
     @Column(name = "service_charge")
     private Float serviceCharge;
-
-    @Column(name = "residual_share")
-    private Float residualShare;
-
-    @Column(name = "time_confirm")
-    private Date timeConfirm;
 
     @Column(name = "confirm_sign")
     private Boolean confirmSign;
@@ -67,57 +90,51 @@ public class BuyFundJoinVo {
     /**
      * @return fund_id
      */
-    public String getFundId() {
-        return fundId;
-    }
 
     /**
      * @param fundId
      */
-    public void setFundId(String fundId) {
-        this.fundId = fundId;
+
+    /**
+     * @return sell_time
+     */
+    public Date getSellTime() {
+        return sellTime;
     }
 
     /**
-     * @return time_buying
+     * @param sellTime
      */
-    public Date getTimeBuying() {
-        return timeBuying;
+    public void setSellTime(Date sellTime) {
+        this.sellTime = sellTime;
     }
 
     /**
-     * @param timeBuying
+     * @return sell_share
      */
-    public void setTimeBuying(Date timeBuying) {
-        this.timeBuying = timeBuying;
+    public Float getSellShare() {
+        return sellShare;
     }
 
     /**
-     * @return transaction_amount
+     * @param sellShare
      */
-    public Float getTransactionAmount() {
-        return transactionAmount;
+    public void setSellShare(Float sellShare) {
+        this.sellShare = sellShare;
     }
 
     /**
-     * @param transactionAmount
+     * @return sure_net
      */
-    public void setTransactionAmount(Float transactionAmount) {
-        this.transactionAmount = transactionAmount;
+    public Float getSureNet() {
+        return sureNet;
     }
 
     /**
-     * @return confirm_the_net
+     * @param sureNet
      */
-    public Float getConfirmTheNet() {
-        return confirmTheNet;
-    }
-
-    /**
-     * @param confirmTheNet
-     */
-    public void setConfirmTheNet(Float confirmTheNet) {
-        this.confirmTheNet = confirmTheNet;
+    public void setSureNet(Float sureNet) {
+        this.sureNet = sureNet;
     }
 
     /**
@@ -135,34 +152,6 @@ public class BuyFundJoinVo {
     }
 
     /**
-     * @return residual_share
-     */
-    public Float getResidualShare() {
-        return residualShare;
-    }
-
-    /**
-     * @param residualShare
-     */
-    public void setResidualShare(Float residualShare) {
-        this.residualShare = residualShare;
-    }
-
-    /**
-     * @return time_confirm
-     */
-    public Date getTimeConfirm() {
-        return timeConfirm;
-    }
-
-    /**
-     * @param timeConfirm
-     */
-    public void setTimeConfirm(Date timeConfirm) {
-        this.timeConfirm = timeConfirm;
-    }
-
-    /**
      * @return confirm_sign
      */
     public Boolean getConfirmSign() {
@@ -176,33 +165,19 @@ public class BuyFundJoinVo {
         this.confirmSign = confirmSign;
     }
 
-    @Column(name = "fund_name")
-    private String fundName;
+    /**
+     * @return fund_id
+     */
+    public String getFundId() {
+        return fundId;
+    }
 
-    @Column(name = "manager_ids")
-    private String managerIds;
-
-    @Column(name = "manager_names")
-    private String managerNames;
-
-    private String time;
-
-    @Column(name = "sell_rate")
-    private String sellRate;
-
-    @Column(name = "buying_rate")
-    private Float buyingRate;
-
-    @Column(name = "hosting_fees")
-    private Float hostingFees;
-
-    private String type;
-
-    private Integer priority;
-
-    private Boolean disappear;
-
-    private String photo;
+    /**
+     * @param fundId
+     */
+    public void setFundId(String fundId) {
+        this.fundId = fundId;
+    }
 
     /**
      * @return fund_name

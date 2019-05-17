@@ -4,9 +4,11 @@ import cn.edu.neu.School_Jobs.mapper.SellOrderMapper;
 import cn.edu.neu.School_Jobs.model.SellOrder;
 import cn.edu.neu.School_Jobs.service.SellOrderService;
 import cn.edu.neu.School_Jobs.util.AbstractService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,8 +27,26 @@ public class SellOrderServiceImpl extends AbstractService<SellOrder> implements 
     }
 
     @Override
-    public List<SellOrder> selectByUserId(int userId) {
-        return sellOrderMapper.selectByUserId(userId);
+    public List<SellOrder> findOrdersWithFundInfo(int userId) {
+        return sellOrderMapper.findOrdersWithFundInfo(userId);
     }
 
+    @Override
+    public List<SellOrder> findHistoryOrder(int day, int userId, int confirmSign) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("day", day);
+        jsonObject.put("userId", userId);
+        jsonObject.put("confirmSign", confirmSign);
+        return sellOrderMapper.findHistoryOrder(jsonObject);
+    }
+    @Override
+    public SellOrder initialSellOrder(SellOrder sellOrder,int user_id){
+        sellOrder.setUserId(user_id);
+        sellOrder.setOrderId(null);
+        sellOrder.setSellTime(new Date());
+        sellOrder.setSureNet(-1.f);
+        sellOrder.setServiceCharge(-1.f);
+        sellOrder.setConfirmSign(false);
+        return sellOrder;
+    }
 }

@@ -3,20 +3,19 @@ package cn.edu.neu.School_Jobs.controller;
 import cn.edu.neu.School_Jobs.model.FundHolding;
 import cn.edu.neu.School_Jobs.model.Stock;
 import cn.edu.neu.School_Jobs.service.FundHoldingService;
+import cn.edu.neu.School_Jobs.util.CommonUtil;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
-import cn.edu.neu.School_Jobs.util.CommonUtil;
-import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
-
-
+/**
+ * created by fzb on 2019/05/10.
+ */
 @RestController
 @RequestMapping("/fund_holding")
 public class FundHoldingController {

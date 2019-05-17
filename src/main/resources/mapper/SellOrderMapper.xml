@@ -15,7 +15,7 @@
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
     </resultMap>
 
-    <resultMap id="SellResultMap" type="cn.edu.neu.School_Jobs.vo.SellFundJoinVo">
+    <resultMap id="SellOrderJoinFund" type="cn.edu.neu.School_Jobs.vo.SellOrderJoinFundVo">
         <!--
           WARNING - @mbg.generated
         -->
@@ -49,8 +49,30 @@
     select sum(sell_share-service_charge) as sure_sell_amount from sell_order where user_id=#{userId} and confirm_sign=1 group by user_id
   </select>
 
-    <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="SellResultMap">
-    select * from sell_order left join fund on fund.fund_id=sell_order.fund_id where user_id=#{userId} order by sell_time DESC
+    <select id="findOrdersWithFundInfo" parameterType="java.lang.Integer" resultMap="SellOrderJoinFund">
+    select *
+    from sell_order
+    left join fund
+    on fund.fund_id=sell_order.fund_id
+    where user_id=#{userId}
+    order by sell_time DESC
   </select>
 
+    <select id="findHistoryOrder" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT *
+        FROM sell_order
+        <where>
+            <if test="day!=null">
+                DATE_SUB(CURDATE(), INTERVAL #{day} DAY) &lt;= sell_time
+            </if>
+            <if test="userId!=null">
+                AND
+                user_id =#{userId}
+            </if>
+            <if test="confirmSign!=2">
+                AND
+                confirm_sign = #{confirmSign}
+            </if>
+        </where>
+    </select>
 </mapper>

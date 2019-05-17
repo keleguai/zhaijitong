@@ -11,7 +11,7 @@
         <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
     </resultMap>
 
-    <resultMap id="HistoryJoinFund" type="cn.edu.neu.School_Jobs.vo.HistoryJoinFundVo">
+    <resultMap id="HistoryFundJoinFund" type="cn.edu.neu.School_Jobs.vo.HistoryFundJoinFundVo">
         <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
         <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
         <result column="date" jdbcType="LONGVARCHAR" property="date"/>
@@ -29,7 +29,7 @@
         <result column="photo" jdbcType="VARCHAR" property="photo"/>
     </resultMap>
 
-    <select id="findAllFundJoinHistory" parameterType="java.lang.String" resultMap="HistoryJoinFund">
+    <select id="findFundWithHistoryData" parameterType="java.lang.String" resultMap="HistoryFundJoinFund">
     select * from historical_fund left join fund f on historical_fund.fund_id = f.fund_id
   </select>
 </mapper>

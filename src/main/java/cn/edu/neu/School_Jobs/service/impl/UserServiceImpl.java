@@ -5,8 +5,8 @@ import cn.edu.neu.School_Jobs.model.User;
 import cn.edu.neu.School_Jobs.service.UserService;
 import cn.edu.neu.School_Jobs.util.AbstractService;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 

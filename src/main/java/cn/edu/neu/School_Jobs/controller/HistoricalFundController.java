@@ -2,8 +2,7 @@ package cn.edu.neu.School_Jobs.controller;
 
 import cn.edu.neu.School_Jobs.model.HistoricalFund;
 import cn.edu.neu.School_Jobs.service.HistoricalFundService;
-import cn.edu.neu.School_Jobs.vo.HistoryJoinFundVo;
-import com.alibaba.fastjson.JSONArray;
+import cn.edu.neu.School_Jobs.vo.HistoryFundJoinFundVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.neu.School_Jobs.util.CommonUtil;
-import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
 
 /**
  * created by fzb on 2019/05/10.
@@ -41,18 +39,18 @@ public class HistoricalFundController {
     //todo 展示排行表
     @RequestMapping(value = "/rank/{day}/{pageNum}", method = RequestMethod.GET)
     public JSONObject getRank(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "day") int day) {
-        List<HistoryJoinFundVo> historyJoinFundVos = historicalFundService.findAllFundJoinHistory();
+        List<HistoryFundJoinFundVo> historyFundJoinFundVos = historicalFundService.findFundWithHistoryData();
         // 设置1页的数量
         int pageSize = 5;
-        List<HistoryJoinFundVo> list = new ArrayList<>();
-        int count = historyJoinFundVos.size();
-        int loop = Math.min(pageNum * pageSize, historyJoinFundVos.size());
+        List<HistoryFundJoinFundVo> list = new ArrayList<>();
+        int count = historyFundJoinFundVos.size();
+        int loop = Math.min(pageNum * pageSize, historyFundJoinFundVos.size());
         for (int i = 0; i < loop; i++) {
             // 设置最小值更新以及下标
             Float min = Float.MIN_VALUE;
             int index = 0;
-            for (int j = 0; j < historyJoinFundVos.size(); j++) {
-                String[] prices = historyJoinFundVos.get(j).getHistoryPrice().split("-");
+            for (int j = 0; j < historyFundJoinFundVos.size(); j++) {
+                String[] prices = historyFundJoinFundVos.get(j).getHistoryPrice().split("-");
                 int length = prices.length;
                 day = length - 1 > day ? day : length - 1;
                 // 价格变化率
@@ -63,13 +61,13 @@ public class HistoricalFundController {
                     index = j;
                 }
             }
-            HistoryJoinFundVo max_history = historyJoinFundVos.get(index);
+            HistoryFundJoinFundVo max_history = historyFundJoinFundVos.get(index);
             max_history.setHistoryRate(min.toString());
             max_history.setDate(null);
             max_history.setHistoryPrice(null);
-            list.add(historyJoinFundVos.get(index));
+            list.add(historyFundJoinFundVos.get(index));
             // 弹出最大元素
-            historyJoinFundVos.remove(index);
+            historyFundJoinFundVos.remove(index);
         }
         return CommonUtil.successJson(CommonUtil.pageInfo(pageNum, pageSize, count, list));
     }

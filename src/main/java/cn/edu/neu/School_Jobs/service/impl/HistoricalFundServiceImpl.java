@@ -4,9 +4,9 @@ import cn.edu.neu.School_Jobs.mapper.HistoricalFundMapper;
 import cn.edu.neu.School_Jobs.model.HistoricalFund;
 import cn.edu.neu.School_Jobs.service.HistoricalFundService;
 import cn.edu.neu.School_Jobs.util.AbstractService;
-import cn.edu.neu.School_Jobs.vo.HistoryJoinFundVo;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.edu.neu.School_Jobs.vo.HistoryFundJoinFundVo;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ public class HistoricalFundServiceImpl extends AbstractService<HistoricalFund> i
     private HistoricalFundMapper historicalFundMapper;
 
     @Override
-    public List<HistoryJoinFundVo> findAllFundJoinHistory() {
-        return historicalFundMapper.findAllFundJoinHistory();
+    public List<HistoryFundJoinFundVo> findFundWithHistoryData() {
+        return historicalFundMapper.findFundWithHistoryData();
     }
 
 }
