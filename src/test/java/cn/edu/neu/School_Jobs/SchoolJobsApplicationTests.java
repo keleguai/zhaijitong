@@ -6,6 +6,9 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 //@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class SchoolJobsApplicationTests {
@@ -16,8 +19,6 @@ public class SchoolJobsApplicationTests {
 
     @Test
     public void encryption() {
-        System.out.println("BEFORE = 123456, LLG\n After = " + Encryptor.encrypt("123456", "LLG"));
-        System.out.println(Encryptor.encrypt("123456", "LLL"));
     }
 
 }
