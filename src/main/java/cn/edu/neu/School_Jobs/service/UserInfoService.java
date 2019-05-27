@@ -10,4 +10,8 @@ public interface UserInfoService extends Service<UserInfo> {
     float getHistoryRate(int userId, int day);
 
     String getEncryPhotoUrl(int userId);
+    String getEncryPayPassword(String payPasswor);
+    int selectByIdAndPayPassword(String userId,String payPassword);
+    int computeAge(String IdNO);
+    String computeSex(String IdNo);
 }

@@ -2,6 +2,7 @@ package cn.edu.neu.School_Jobs.mapper;
 
 import cn.edu.neu.School_Jobs.model.SellOrder;
 import cn.edu.neu.School_Jobs.util.MyMapper;
+import cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.HashMap;
@@ -13,4 +14,6 @@ public interface SellOrderMapper extends MyMapper<SellOrder> {
     List<SellOrder> findOrdersWithFundInfo(int userId);
 
     List<SellOrder> findHistoryOrder(JSONObject jsonObject);
+
+    List<SellOrderJoinHistoryFund> selectOrderWithHistoryFundByField(JSONObject jsonObject);
 }

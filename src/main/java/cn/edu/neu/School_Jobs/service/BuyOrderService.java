@@ -27,4 +27,6 @@ public interface BuyOrderService extends Service<BuyOrder> {
     List<BuyOrder> findHistoryOrder(int day, int userId, boolean confirmSign);
 
     BuyOrder initialBuyOrderForInsert(BuyOrder buyOrder,int userId);
+
+    List<BuyOrderJoinHistoryFundJoinFundVo> selectOrdersLeftJoinHistoryFundByField(String userId,String confirmSign);
 }

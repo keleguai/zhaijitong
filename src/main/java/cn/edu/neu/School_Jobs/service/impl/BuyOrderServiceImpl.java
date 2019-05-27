@@ -75,4 +75,12 @@ public class BuyOrderServiceImpl extends AbstractService<BuyOrder> implements Bu
         buyOrder.setTimeConfirm(null);
         return buyOrder;
     }
+
+    @Override
+    public List<BuyOrderJoinHistoryFundJoinFundVo> selectOrdersLeftJoinHistoryFundByField(String userId,String confirmSign){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", userId);
+        jsonObject.put("confirmSign",confirmSign);
+        return buyOrderMapper.selectOrdersLeftJoinHistoryFundByField(jsonObject);
+    }
 }

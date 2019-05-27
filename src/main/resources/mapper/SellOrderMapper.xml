@@ -15,6 +15,20 @@
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
     </resultMap>
 
+    <resultMap id="SellOrderJoinHistoryFund" type="cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund">
+        <id column="order_id" jdbcType="INTEGER" property="orderId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="sell_time" jdbcType="DATE" property="sellTime"/>
+        <result column="sell_share" jdbcType="REAL" property="sellShare"/>
+        <result column="sure_net" jdbcType="REAL" property="sureNet"/>
+        <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
+        <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
+        <result column="date" jdbcType="LONGVARCHAR" property="date"/>
+        <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
+    </resultMap>
+
     <resultMap id="SellOrderJoinFund" type="cn.edu.neu.School_Jobs.vo.SellOrderJoinFundVo">
         <!--
           WARNING - @mbg.generated
@@ -45,9 +59,33 @@
         <result column="sure_sell_amount" jdbcType="REAL" property="sureSellAmount"/>
     </resultMap>
 
+
+    <select id="selectOrderWithHistoryFundByField" parameterType="com.alibaba.fastjson.JSONObject"
+            resultMap="SellOrderJoinHistoryFund">
+        SELECT *
+        FROM sell_order
+        LEFT JOIN historical_fund
+        ON sell_order.fund_id = historical_fund.fund_id
+        <where>
+            <if test="userId!=null">
+                user_id = #{userId}
+            </if>
+            <if test="confirmSign!=null">
+                AND confirm_sign = #{cofirmSign}
+            </if>
+        </where>
+    </select>
+
     <select id="selectHasSellMoney" parameterType="java.lang.Integer" resultMap="SellSumAmount">
-    select sum(sell_share-service_charge) as sure_sell_amount from sell_order where user_id=#{userId} and confirm_sign=1 group by user_id
+    select
+    sum(sell_share-service_charge)
+    as sure_sell_amount
+    from sell_order
+    where user_id=#{userId}
+    and confirm_sign=1
+    group by user_id
   </select>
+
 
     <select id="findOrdersWithFundInfo" parameterType="java.lang.Integer" resultMap="SellOrderJoinFund">
     select *
@@ -75,4 +113,6 @@
             </if>
         </where>
     </select>
+
+    <!--<select id="findOrder"-->
 </mapper>

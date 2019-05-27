@@ -1,9 +1,11 @@
 package cn.edu.neu.School_Jobs.vo;
 
+import cn.edu.neu.School_Jobs.model.SellOrder;
+
 import javax.persistence.*;
 import java.util.Date;
 
-public class SellOrderJoinFundVo {
+public class SellOrderJoinFundVo extends SellOrder {
     @Id
     @Column(name = "fund_id")
     private String fundId;

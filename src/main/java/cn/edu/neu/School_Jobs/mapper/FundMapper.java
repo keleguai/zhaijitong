@@ -9,11 +9,11 @@ import java.util.List;
 public interface FundMapper extends MyMapper<Fund> {
     List<Fund> selectOrderByPriority();
 
-    List<Fund> selectByType(JSONObject jsonObject);
+    List<Fund> selectByField(JSONObject jsonObject);
 
     List<Fund> selectByAll(JSONObject jsonObject);
 
     List<Fund> selectByDisStock();
 
-    List<Fund> selectByDisStockId(JSONObject jsonObject);
+    List<Fund> selectByStockId(JSONObject jsonObject);
 }

@@ -2,6 +2,7 @@ package cn.edu.neu.School_Jobs.controller;
 
 import cn.edu.neu.School_Jobs.model.FundManager;
 import cn.edu.neu.School_Jobs.service.FundManagerService;
+import cn.edu.neu.School_Jobs.service.FundService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,8 @@ public class FundManagerController {
 
     @Autowired
     FundManagerService fundManagerService;
+    @Autowired
+    FundService fundService;
 
 
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
@@ -35,6 +38,17 @@ public class FundManagerController {
         return CommonUtil.successJson(pageInfo);
     }
 
+    // 返回基金经理信息
+    @RequestMapping(value = "/info/{id}")
+    public JSONObject findFundManagerById(@PathVariable(value = "id") int id){
+        return CommonUtil.successJson(fundManagerService.findById(id));
+    }
+
+    // 返回基金经理所管理的基金
+    @RequestMapping(value = "/products/{id}")
+    public JSONObject findFundByManagerId(@PathVariable(value = "id")int id){
+        return CommonUtil.successJson(fundService.selectByField(null,String.valueOf(id)));
+    }
     @PostMapping("/add")
     public JSONObject addFundManager(@RequestBody JSONObject requestJson) {
         //try{

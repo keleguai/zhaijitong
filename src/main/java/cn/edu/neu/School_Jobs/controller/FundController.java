@@ -4,6 +4,8 @@ import cn.edu.neu.School_Jobs.model.Fund;
 import cn.edu.neu.School_Jobs.model.UserInfo;
 import cn.edu.neu.School_Jobs.service.*;
 import cn.edu.neu.School_Jobs.util.CommonUtil;
+import cn.edu.neu.School_Jobs.util.Jwt;
+import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -112,19 +114,17 @@ public class FundController {
         return CommonUtil.successJson(pageInfo);
     }
 
-    @RequestMapping(value = "/disappear/{stockId}/{pageNum}", method = RequestMethod.GET)
-    public JSONObject DisFundId(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "stockId") String stockId) {
-        PageHelper.startPage(pageNum, 5);
-        List<Fund> list = fundService.selectByDisStockId(stockId);
-        PageInfo pageInfo = new PageInfo(list);
-        return CommonUtil.successJson(pageInfo);
+    @RequestMapping(value = "/by/{stockId}", method = RequestMethod.GET)
+    public JSONObject DisFundId(@PathVariable(value = "stockId") String stockId) {
+        List<Fund> list = fundService.selectByStockId(stockId);
+        return CommonUtil.successJson(list);
     }
 
 
     @RequestMapping(value = "/type/{pageNum}/{type}", method = RequestMethod.GET)
     public JSONObject fund_type(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "type") String type) {
         PageHelper.startPage(pageNum, 5);
-        List<Fund> list = fundService.selectByType(type);
+        List<Fund> list = fundService.selectByField(type,null);
         PageInfo pageInfo = new PageInfo(list);
         return CommonUtil.successJson(pageInfo);
     }
@@ -152,11 +152,15 @@ public class FundController {
     }
 
     @PostMapping("/update")
-    public JSONObject updateFund(@RequestBody JSONObject requestJson) {
+    public JSONObject updateFund(@RequestBody JSONObject requestJson,HttpServletRequest request) {
+        int userId = Jwt.getUserId(request);
         Fund fund = JSONObject.toJavaObject(requestJson, Fund.class);
-        fundService.update(fund);
-
-        return CommonUtil.successJson();
+        // 对于更新基金的行为做一下验证，验证是否是管理员
+        if(userService.findById(userId).getUserType()==1){
+            fundService.update(fund);
+            return CommonUtil.successJson();
+        }
+        return CommonUtil.errorJson(ErrorEnum.E_785);
     }
 
     @DeleteMapping("/delete/{id}")

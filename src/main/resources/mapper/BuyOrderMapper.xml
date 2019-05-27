@@ -17,7 +17,7 @@
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
     </resultMap>
 
-    <resultMap id="BuyOrderLeftJoinResult" type="cn.edu.neu.School_Jobs.vo.BuyOrderJoinFundVo">
+    <resultMap id="BuyOrderLeftJoinFundResult" type="cn.edu.neu.School_Jobs.vo.BuyOrderJoinFundVo">
         <id column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
@@ -92,13 +92,13 @@
     </select>
 
     <!--找出全部买的订单-->
-    <select id="findOrdersWithFundInfo" parameterType="java.lang.Integer" resultMap="BuyOrderLeftJoinResult">
-    select *
-    from buy_order
-    left join fund
-    on fund.fund_id=buy_order.fund_id
-    where user_id=#{userId}
-    order by time_buying DESC
+    <select id="findOrdersWithFundInfo" parameterType="java.lang.Integer" resultMap="BuyOrderLeftJoinFundResult">
+        select *
+        from buy_order
+        left join fund
+        on fund.fund_id=buy_order.fund_id
+        where user_id=#{userId}
+        order by time_buying DESC
   </select>
 
     <select id="getSumByBuyMoney" parameterType="java.lang.Integer" resultMap="BuySumAmount">
@@ -110,6 +110,7 @@
     select sum(confirm_the_net*residual_share-service_charge) as sum_buy from buy_order where user_id = #{userId} and confirm_sign=1 group by user_id
   </select>
 
+    <!--// todo 删除-->
     <!--得到所有金额的钱-->
     <select id="getSumByNetMoneyAndFid" parameterType="java.lang.Integer" resultMap="BuySumAmount">
     select
@@ -120,6 +121,21 @@
     and fund_id=#{fundId}
     group by user_id
   </select>
+
+    <select id="selectOrdersLeftJoinHistoryFundByField" parameterType="com.alibaba.fastjson.JSONObject"
+            resultMap="BuyOrderJoinHistoryFundJoinFund">
+      SELECT * FROM buy_order
+      LEFT JOIN historical_fund
+      ON buy_order.fund_id = historical_fund.fund_id
+      <where>
+          <if test="userId!=null">
+              user_id = #{userId}
+          </if>
+          <if test="confirm_sign!=null">
+              AND confirm_sign = #{confirmSign}
+          </if>
+      </where>
+    </select>
 
     <select id="findAllHasBuyFund" parameterType="java.lang.Integer" resultMap="BuyOrderJoinHistoryFundJoinFund">
     select * from
@@ -141,7 +157,7 @@
         WHERE fund_id=#{fundId}
         AND confirm_sign=1
         AND user_id=#{userId}
-        ORDER time_buying
+        ORDER BY time_buying
     </select>
 
 </mapper>

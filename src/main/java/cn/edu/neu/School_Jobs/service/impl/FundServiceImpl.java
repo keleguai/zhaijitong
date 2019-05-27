@@ -23,17 +23,17 @@ public class FundServiceImpl extends AbstractService<Fund> implements FundServic
         return fundMapper.selectOrderByPriority();
     }
 
-//    public List<Fund> selectByType(String type) {
+//    public List<Fund> selectByField(String type) {
 //        JSONObject jsonObject = new JSONObject();
 //        jsonObject.put("type", type);
-//        return fundMapper.selectByType(jsonObject);
+//        return fundMapper.selectByField(jsonObject);
 //    }
 
     @Override
-    public List<Fund> selectByDisStockId(String stockId) {
+    public List<Fund> selectByStockId(String stockId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("stockId", stockId);
-        return fundMapper.selectByDisStockId(jsonObject);
+        return fundMapper.selectByStockId(jsonObject);
     }
 
     @Override
@@ -42,10 +42,11 @@ public class FundServiceImpl extends AbstractService<Fund> implements FundServic
     }
 
     @Override
-    public List<Fund> selectByType(String type) {
+    public List<Fund> selectByField(String type,String managerId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", type);
-        return fundMapper.selectByType(jsonObject);
+        jsonObject.put("managerId",managerId);
+        return fundMapper.selectByField(jsonObject);
     }
 
     @Override

@@ -23,4 +23,6 @@ public interface BuyOrderMapper extends MyMapper<BuyOrder> {
     List<BuyOrder> findOneFundOrders(JSONObject jsonObject);
 
     List<BuyOrder> findHistoryOrder(JSONObject jsonObject);
+
+    List<BuyOrderJoinHistoryFundJoinFundVo> selectOrdersLeftJoinHistoryFundByField(JSONObject jsonObject);
 }

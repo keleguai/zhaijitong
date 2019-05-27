@@ -4,6 +4,7 @@ import cn.edu.neu.School_Jobs.model.BuyOrder;
 import cn.edu.neu.School_Jobs.model.SellOrder;
 import cn.edu.neu.School_Jobs.service.BuyOrderService;
 import cn.edu.neu.School_Jobs.service.SellOrderService;
+import cn.edu.neu.School_Jobs.service.UserInfoService;
 import cn.edu.neu.School_Jobs.util.Jwt;
 import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 import com.github.pagehelper.PageHelper;
@@ -32,6 +33,8 @@ public class SellOrderController {
     SellOrderService sellOrderService;
     @Autowired
     BuyOrderService buyOrderService;
+    @Autowired
+    UserInfoService userInfoService;
 
 
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
@@ -57,13 +60,21 @@ public class SellOrderController {
     public JSONObject addSellOrder(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         // 得到用户id
         int userId = Jwt.getUserId(request);
+        String payPassword =userInfoService.getEncryPayPassword(requestJson.get("payPassword").toString());
+        if(userInfoService.selectByIdAndPayPassword(String.valueOf(userId),payPassword)==0){
+            return CommonUtil.errorJson(ErrorEnum.E_784);
+        }
         try{
             // 如果强制转换失败，说明卖出的值非数字
             SellOrder sellOrder = JSONObject.toJavaObject(requestJson, SellOrder.class);
+            sellOrder.setUserId(userId);
             // 得到所有已经该客户已经确认买入的这个基金订单
-            List<BuyOrder> buyOrders = buyOrderService.findOneFundOrders(sellOrder.getUserId(), sellOrder.getFundId());
+            List<BuyOrder> buyOrders = buyOrderService.findOneFundOrders(userId, sellOrder.getFundId());
             // 判断卖的值是否正确，所以先拿到卖的份额
             Float remainShare = sellOrder.getSellShare();
+            if(remainShare<=1){
+                return CommonUtil.errorJson(ErrorEnum.E_787);
+            }
             for (int i = 0; i < buyOrders.size(); i++) {
                 BuyOrder aBuyOrder = buyOrders.get(i);
                 // 如果订单的份额大于买单的剩余份额
@@ -93,6 +104,7 @@ public class SellOrderController {
                 return CommonUtil.successJson();
             }
         }catch (Exception e){
+            System.out.println(e.toString());
             return CommonUtil.errorJson(ErrorEnum.E_783);
         }
     }

@@ -70,6 +70,4 @@ public class UserWalletController {
 
         return CommonUtil.successJson();
     }
-
-
 }

@@ -11,11 +11,11 @@ import java.util.List;
 public interface FundService extends Service<Fund> {
     List<Fund> selectOrderByPriority();
 
-    List<Fund> selectByType(String type);
+    List<Fund> selectByField(String type,String managerId);
 
     List<Fund> selectByAll(String regex);
 
     List<Fund> selectByDisStock();
 
-    List<Fund> selectByDisStockId(String stockId);
+    List<Fund> selectByStockId(String stockId);
 }

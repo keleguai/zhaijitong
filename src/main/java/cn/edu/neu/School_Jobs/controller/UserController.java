@@ -58,7 +58,9 @@ public class UserController {
             payload.put("expiryTime", date.getTime() + Constants.EXPIRY_TIME);//过期时间1小时
             payload.put("type", user.get(0).getUserType());
             String token = Jwt.createToken(payload);
-            return CommonUtil.successJsonWithToken(null, token);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("type", user.get(0).getUserType());
+            return CommonUtil.successJsonWithToken(jsonObject, token);
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_778);
         }
@@ -99,8 +101,13 @@ public class UserController {
         //}
 
         User user = JSONObject.toJavaObject(requestJson, User.class);
+        List<User> thisUser = userService.selectAllByPhone(user.getPhoneNumber());
+        if(thisUser==null){
+            return CommonUtil.errorJson(ErrorEnum.E_778);
+        }
+        user.setUserId(thisUser.get(0).getUserId());
+        user.setPassword(Encryptor.encrypt(user.getPassword(), user.getPhoneNumber()));
         userService.update(user);
-
         return CommonUtil.successJson();
     }
 

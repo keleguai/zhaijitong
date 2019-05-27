@@ -15,6 +15,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -84,5 +86,39 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
     public String getEncryPhotoUrl(int userId) {
         String nomalPhotoUrl = String.valueOf(userId);
         return Encryptor.encrypt(nomalPhotoUrl, nomalPhotoUrl) + ".jpg";
+    }
+
+    @Override
+    public int computeAge(String IdNO){
+        int leh = IdNO.length();
+        String dates="";
+        if (leh == 18) {
+            int se = Integer.valueOf(IdNO.substring(leh - 1)) % 2;
+            dates = IdNO.substring(6, 10);
+            SimpleDateFormat df = new SimpleDateFormat("yyyy");
+            String year=df.format(new Date());
+            int u=Integer.parseInt(year)-Integer.parseInt(dates);
+            return u;
+        }else{
+            dates = IdNO.substring(6, 8);
+            return Integer.parseInt(dates);
+        }
+    }
+    @Override
+    public String computeSex(String IdNO){
+        StringBuffer sb = new StringBuffer(IdNO);
+        return String.valueOf(Integer.parseInt(String.valueOf(sb.charAt(sb.length()-2)))%2);
+    }
+
+    @Override
+    public String getEncryPayPassword(String payPassword){
+        return Encryptor.encrypt(payPassword,payPassword);
+    }
+    @Override
+    public int selectByIdAndPayPassword(String userId,String payPassword){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId",userId);
+        jsonObject.put("payPassword",payPassword);
+        return userInfoMapper.selectByIdAndPayPassword(jsonObject);
     }
 }

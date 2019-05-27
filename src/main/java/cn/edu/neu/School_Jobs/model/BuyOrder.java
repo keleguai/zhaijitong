@@ -36,6 +36,17 @@ public class BuyOrder {
     @Column(name = "confirm_sign")
     private Boolean confirmSign;
 
+    @Column(name = "sell_out")
+    private Boolean sellOut;
+
+    public Boolean getSellOut() {
+        return sellOut;
+    };
+
+    public void setSellOut(Boolean sellOut) {
+        this.sellOut = sellOut;
+    };
+
     /**
      * @return order_id
      */

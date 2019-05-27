@@ -4,6 +4,7 @@ import cn.edu.neu.School_Jobs.mapper.SellOrderMapper;
 import cn.edu.neu.School_Jobs.model.SellOrder;
 import cn.edu.neu.School_Jobs.service.SellOrderService;
 import cn.edu.neu.School_Jobs.util.AbstractService;
+import cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,13 @@ public class SellOrderServiceImpl extends AbstractService<SellOrder> implements 
         sellOrder.setServiceCharge(-1.f);
         sellOrder.setConfirmSign(false);
         return sellOrder;
+    }
+
+    @Override
+    public List<SellOrderJoinHistoryFund> selectOrderWithHistoryFundByField(String userId,String confirmSign){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("confirm",confirmSign);
+        jsonObject.put("userId",userId);
+        return sellOrderMapper.selectOrderWithHistoryFundByField(jsonObject);
     }
 }

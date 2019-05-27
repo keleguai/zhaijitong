@@ -10,6 +10,7 @@ import cn.edu.neu.School_Jobs.util.CommonUtil;
 import cn.edu.neu.School_Jobs.util.Jwt;
 import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 import cn.edu.neu.School_Jobs.vo.BuyOrderJoinHistoryFundJoinFundVo;
+import cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -49,6 +50,7 @@ public class BuyOrderController {
     @PostMapping("/add")
     public JSONObject addBuyOrder(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         try {
+            String pay_password = requestJson.getString("pay_password");
             // 强制类型转换的时候失败是由于字符串
             BuyOrder buyOrder = JSONObject.toJavaObject(requestJson, BuyOrder.class);
             int userId = Jwt.getUserId(request);
@@ -61,8 +63,11 @@ public class BuyOrderController {
                 return CommonUtil.errorJson(ErrorEnum.E_780);
             }
             // 储存买入信息
-            buyOrderService.save(buyOrder);
-            return CommonUtil.successJson();
+            if(userInfoService.selectByIdAndPayPassword(String.valueOf(userId),userInfoService.getEncryPayPassword(pay_password))!=0){
+                buyOrderService.save(buyOrder);
+                return CommonUtil.successJson();
+            }
+            return CommonUtil.errorJson(ErrorEnum.E_784);
         } catch (Exception e) {
             return CommonUtil.errorJson(ErrorEnum.E_781);
         }
@@ -117,26 +122,43 @@ public class BuyOrderController {
     @GetMapping("/show/buy_amount")
     public JSONObject show_buy_amount(HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
+        /**
+         * 现在有什么价值： 持有基金的净值，买入未确定的基金价钱，卖出未确定的基金的价值
+         */
         int userId = Jwt.getUserId(request);
-        // 买入未确认所花费的钱
+
+        // 买入未确定的基金价钱
         HashMap not_sure_buy = buyOrderService.getSumByBuyMoney(userId);
 
-        // 买入确认后剩余份额*净值-手续费的钱
-        HashMap sure_buy = buyOrderService.getSumByNetMoney(userId);
-        // 确定卖出的基金
-        HashMap sure_sell = sellOrderService.selectHasSellMoney(userId);
-        //  收益率为（目前拥有的基金+已经卖出的基金）的总价格/总共已经花的总价格
-        float rate = userInfoService.getHistoryRate(userId,1024);
-        // 确定卖出的基金+现在已经确定购买的基金+
-        float from_buy_order_money = 0;
-        // 买的订单所拥有的钱
-        if (sure_buy != null && not_sure_buy != null) {
-            from_buy_order_money = Float.parseFloat(sure_buy.get("sumBuy").toString()) + Float.parseFloat(not_sure_buy.get("sumBuy").toString());
-        } else if (not_sure_buy != null || sure_buy != null) {
-            from_buy_order_money = sure_buy != null ? Float.parseFloat(sure_buy.get("sumBuy").toString()) : Float.parseFloat(not_sure_buy.get("sumBuy").toString());
+        // 买入确认后的基金最新价格以及其信息
+        List<BuyOrderJoinHistoryFundJoinFundVo> buyOrderJoinHistoryFundJoinFundVos = buyOrderService.selectOrdersLeftJoinHistoryFundByField(String.valueOf(userId),String.valueOf(1));
+        float sureMoney = 0;
+        // 累计计算每个已确定订单的最新价格
+        for(BuyOrderJoinHistoryFundJoinFundVo buyOrderJoinHistoryFundJoinFundVo:buyOrderJoinHistoryFundJoinFundVos){
+            // 如果份额大于0的话
+            if(buyOrderJoinHistoryFundJoinFundVo.getResidualShare()>0){
+                // 净值为prices,最后一个值为最新净值
+                String[] prices = buyOrderJoinHistoryFundJoinFundVo.getHistoryPrice().split("-");
+                // 剩余份额*最新净值-服务费
+                sureMoney += buyOrderJoinHistoryFundJoinFundVo.getResidualShare() * Float.parseFloat(prices[prices.length-1]) - buyOrderJoinHistoryFundJoinFundVo.getServiceCharge();
+            }
         }
-        if (sure_sell != null) {
-            from_buy_order_money -= Float.parseFloat(sure_sell.get("sureSellAmount").toString());
+
+        // 设定原价值为0
+        float notSureSell = 0;
+        // 卖出未确定基金的价值，份额*最新净值
+        List<SellOrderJoinHistoryFund> sellOrderJoinHistoryFunds = sellOrderService.selectOrderWithHistoryFundByField(String.valueOf(userId),String.valueOf(0));
+        for(SellOrderJoinHistoryFund sellOrderJoinHistoryFund:sellOrderJoinHistoryFunds){
+            // 基金的历史净值表
+            String[] prices = sellOrderJoinHistoryFund.getHistoryPrice().split("-");
+            notSureSell += sellOrderJoinHistoryFund.getSellShare()*Float.parseFloat(prices[prices.length-1]);
+        }
+        // 全部买入的价值
+        float from_buy_order_money = 0;
+        if(not_sure_buy!=null){
+            from_buy_order_money = Float.parseFloat(not_sure_buy.get("sumBuy").toString()) + sureMoney + notSureSell;
+        }else {
+            from_buy_order_money = sureMoney + notSureSell;
         }
         jsonObject.put("getAllAmount", from_buy_order_money);
         return CommonUtil.successJson(jsonObject);

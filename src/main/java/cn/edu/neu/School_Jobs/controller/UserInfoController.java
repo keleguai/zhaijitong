@@ -72,9 +72,21 @@ public class UserInfoController {
     public JSONObject addUserInfo(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         UserInfo userInfo = JSONObject.toJavaObject(requestJson, UserInfo.class);
         int userId = Jwt.getUserId(request);
+        // 加密图片地址
         String photoUrl = userInfoService.getEncryPhotoUrl(userId);
+        String encryPayPassword = userInfoService.getEncryPayPassword(userInfo.getPayPassword());
+        // 加密用户支付密码
+        userInfo.setPayPassword(encryPayPassword);
+        // 由身份证获取年龄
+        userInfo.setAge(userInfoService.computeAge(userInfo.getIdentityCard()));
+        // 由身份证获取性别
+        userInfo.setSex(userInfoService.computeSex(userInfo.getIdentityCard()));
         userInfo.setUserId(userId);
-        userInfo.setPhotoUrl("/static/" + photoUrl);
+        if(userInfo.getPhotoUrl()!=null){
+            userInfo.setPhotoUrl("/static/" + photoUrl);
+        }else{
+            userInfo.setPhotoUrl("/static/default.jpg");
+        }
         userInfoService.save(userInfo);
         return CommonUtil.successJson();
     }
@@ -84,6 +96,9 @@ public class UserInfoController {
         int userId = Jwt.getUserId(request);
         String photoUrl = userInfoService.getEncryPhotoUrl(userId);
         UserInfo userInfo = JSONObject.toJavaObject(requestJson, UserInfo.class);
+        if(userInfo.getPayPassword()!=null){
+            userInfo.setPayPassword(userInfoService.getEncryPayPassword(userInfo.getPayPassword()));
+        }
         userInfo.setPhotoUrl("/static/" + photoUrl);
         userInfo.setUserId(Jwt.getUserId(request));
         userInfoService.update(userInfo);
@@ -95,7 +110,7 @@ public class UserInfoController {
     public JSONObject upload(HttpServletRequest request, @RequestParam("file") MultipartFile picture) throws IOException {
         int userId = Jwt.getUserId(request);
         String photoUrl = userInfoService.getEncryPhotoUrl(userId);
-        File f = new File("c:/users/cole/desktop/fund/static/" + photoUrl);
+        File f = new File("C:/Users/cole/Downloads/nginx-1.16.0/html/static/" + photoUrl);
         BufferedOutputStream out = null;
         out = new BufferedOutputStream(new FileOutputStream(f));
         out.write(picture.getBytes());
