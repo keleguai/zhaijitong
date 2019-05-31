@@ -41,7 +41,7 @@ public class FundHoldingController {
         jsonArray.addAll(list);
         FundHolding fundHolding = fundHoldingService.findById(fundId);
         String[] worth_percent = fundHolding.getWorthPercent().split("-");
-        for (int i = 0; i < jsonArray.size(); i++) {
+        for (int i = 0; i < worth_percent.length; i++) {
             JSONObject o = jsonArray.getJSONObject(i);
             o.put("worthPercent", worth_percent[i]);
             jsonArray.set(i, o);

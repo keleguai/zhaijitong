@@ -39,7 +39,7 @@ public class StockController {
     @RequestMapping(value = "/disappear/{pageNum}", method = RequestMethod.GET)
     public JSONObject findStockDisappear(@PathVariable(value = "pageNum") int pageNum) {
 
-        PageHelper.startPage(pageNum, 5);
+        PageHelper.startPage(pageNum, 8);
         List<Stock> list = stockService.selectByDisappear();
         PageInfo pageInfo = new PageInfo(list);
 

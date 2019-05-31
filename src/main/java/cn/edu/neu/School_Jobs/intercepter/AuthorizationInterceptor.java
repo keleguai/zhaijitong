@@ -34,13 +34,13 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             //按照通用错误格式将返回数据写入response.
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"code\":\"401\", \"msg\":\"Invalid token（用户登录过期或者尚未登录）\"}");
+            response.getWriter().write("{\"code\":\"401\", \"msg\":\"用户登录过期或者尚未登录\"}");
             return false;
         } else if (state.equals(TokenState.INVALID_SUBACCOUNT.toString())) {
             //按照通用错误格式将返回数据写入response.
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("{\"code\":\"402\", \"msg\":\"Invalid token（用户登录过期或者尚未登录）\"}");
+            response.getWriter().write("{\"code\":\"402\", \"msg\":\"用户登录过期或者尚未登录\"}");
             return false;
         } else if (state.equals(TokenState.EXPIRED.toString())) {
             //按照通用错误格式将返回数据写入response.

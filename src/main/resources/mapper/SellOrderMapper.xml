@@ -107,12 +107,18 @@
                 AND
                 user_id =#{userId}
             </if>
-            <if test="confirmSign!=2">
+            <if test="confirmSign!=null">
                 AND
                 confirm_sign = #{confirmSign}
             </if>
+            <if test="fundId!=null">
+                AND
+                fund_id = #{fundId}
+            </if>
         </where>
     </select>
+
+
 
     <!--<select id="findOrder"-->
 </mapper>

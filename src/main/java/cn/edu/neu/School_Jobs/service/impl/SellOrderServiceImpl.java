@@ -33,11 +33,12 @@ public class SellOrderServiceImpl extends AbstractService<SellOrder> implements 
     }
 
     @Override
-    public List<SellOrder> findHistoryOrder(int day, int userId, int confirmSign) {
+    public List<SellOrder> findHistoryOrder(int day, int userId, String confirmSign,String fundId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("day", day);
         jsonObject.put("userId", userId);
         jsonObject.put("confirmSign", confirmSign);
+        jsonObject.put("fundId",fundId);
         return sellOrderMapper.findHistoryOrder(jsonObject);
     }
     @Override

@@ -56,6 +56,11 @@ public class SellOrderController {
     }
 
 
+    /**
+     * @author fzb
+     * @date 2019/5/30
+     * @description:不对已有买入订单进行直接操作了
+     */
     @PostMapping("/add")
     public JSONObject addSellOrder(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         // 得到用户id
@@ -75,6 +80,15 @@ public class SellOrderController {
             if(remainShare<=1){
                 return CommonUtil.errorJson(ErrorEnum.E_787);
             }
+            // 找出所有卖出未确认的基金，再对这部分份额进行操作
+            List<SellOrder> sellOrders =  sellOrderService.findHistoryOrder(365,userId,"0",sellOrder.getFundId());
+            float willSellShare = 0;
+            for(SellOrder willSellOrder:sellOrders){
+                willSellShare += willSellOrder.getSellShare();
+            }
+//            System.out.println(remainShare+"这是剩余份额");
+//            System.out.println(willSellShare+"这是总份额");
+            remainShare += willSellShare;
             for (int i = 0; i < buyOrders.size(); i++) {
                 BuyOrder aBuyOrder = buyOrders.get(i);
                 // 如果订单的份额大于买单的剩余份额
@@ -90,14 +104,15 @@ public class SellOrderController {
                     break;
                 }
             }
+
             // 误差设置为0.1，如果一个循环下去，卖出订单的份额还大于0.1的话，则显示买卖失败
             if (remainShare > 0.1) {
                 return CommonUtil.errorJson(ErrorEnum.E_782);
             } else {
                 // 更新所有买的订单表
-                for (BuyOrder buyOrder : buyOrders) {
-                    buyOrderService.update(buyOrder);
-                }
+//                for (BuyOrder buyOrder : buyOrders) {
+//                    buyOrderService.update(buyOrder);
+//                }
                 // 初始化卖单信息以方便插入
                 sellOrder = sellOrderService.initialSellOrder(sellOrder,userId);
                 sellOrderService.save(sellOrder);

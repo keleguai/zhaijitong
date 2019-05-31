@@ -39,7 +39,7 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
         // 该用户 X天内 所有购买且已经确认的订单
         List<BuyOrder> buyOrders = buyOrderService.findHistoryOrder(day, userId, true);
         // 该客户在X天内 所有卖出的订单
-        List<SellOrder> sellOrders = sellOrderService.findHistoryOrder(day, userId, 2);
+        List<SellOrder> sellOrders = sellOrderService.findHistoryOrder(day, userId, "1",null);
         // X天内买的订单交易的总金额
         float amount = 0;
         // 现在基金剩余的价值
@@ -59,18 +59,18 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
             // 计算该客户现在拥有的单个基金的价值
             remain_money += net * buyOrder.getResidualShare();
         }
-        //遍历所有卖出订单
+        //遍历所有卖出且已经订单
         for (SellOrder sellOrder : sellOrders) {
             // 已经卖出的订单
-            if (sellOrder.getConfirmSign()) {
-                has_sell_money += sellOrder.getSellShare() * sellOrder.getSureNet();
-            }//对未卖出的订单进行基金剩余价值的重新计算
-            else {
-                // 取出该基金的净值价格表
-                String[] prices = historicalFundService.findById(sellOrder.getFundId()).getHistoryPrice().split("-");
-                // 将该基金的最新价值*份额加入到现在拥有的财富中
-                remain_money += sellOrder.getSellShare() * Float.parseFloat(prices[prices.length - 1]);
-            }
+//            if (sellOrder.getConfirmSign()) {
+                has_sell_money += sellOrder.getSellShare() * sellOrder.getSureNet() - sellOrder.getServiceCharge();
+//            }//对未卖出的订单进行基金剩余价值的重新计算
+//            else {
+//                // 取出该基金的净值价格表
+//                String[] prices = historicalFundService.findById(sellOrder.getFundId()).getHistoryPrice().split("-");
+//                // 将该基金的最新价值*份额加入到现在拥有的财富中
+//                remain_money += sellOrder.getSellShare() * Float.parseFloat(prices[prices.length - 1]);
+//            }
         }
         // 收益率公式为 （目前拥有的基金+已经卖出的基金）的总价格/总共已经花的总价格
         float getRate = (remain_money + has_sell_money) / amount;
@@ -93,7 +93,6 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
         int leh = IdNO.length();
         String dates="";
         if (leh == 18) {
-            int se = Integer.valueOf(IdNO.substring(leh - 1)) % 2;
             dates = IdNO.substring(6, 10);
             SimpleDateFormat df = new SimpleDateFormat("yyyy");
             String year=df.format(new Date());

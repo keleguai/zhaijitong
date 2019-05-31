@@ -123,7 +123,7 @@ public class FundController {
 
     @RequestMapping(value = "/type/{pageNum}/{type}", method = RequestMethod.GET)
     public JSONObject fund_type(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "type") String type) {
-        PageHelper.startPage(pageNum, 5);
+        PageHelper.startPage(pageNum, 12);
         List<Fund> list = fundService.selectByField(type,null);
         PageInfo pageInfo = new PageInfo(list);
         return CommonUtil.successJson(pageInfo);
@@ -131,7 +131,7 @@ public class FundController {
 
     @RequestMapping(value = "/regex/{pageNum}", method = RequestMethod.GET)
     public JSONObject fund_regex(@PathVariable(value = "pageNum") int pageNum, HttpServletRequest request) {
-        PageHelper.startPage(pageNum, 5);
+        PageHelper.startPage(pageNum, 12);
         List<Fund> list = fundService.selectByAll(request.getParameter("regex"));
         PageInfo pageInfo = new PageInfo(list);
         return CommonUtil.successJson(pageInfo);

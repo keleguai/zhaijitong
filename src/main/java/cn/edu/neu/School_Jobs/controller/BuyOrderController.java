@@ -10,7 +10,6 @@ import cn.edu.neu.School_Jobs.util.CommonUtil;
 import cn.edu.neu.School_Jobs.util.Jwt;
 import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 import cn.edu.neu.School_Jobs.vo.BuyOrderJoinHistoryFundJoinFundVo;
-import cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -63,7 +62,7 @@ public class BuyOrderController {
                 return CommonUtil.errorJson(ErrorEnum.E_780);
             }
             // 储存买入信息
-            if(userInfoService.selectByIdAndPayPassword(String.valueOf(userId),userInfoService.getEncryPayPassword(pay_password))!=0){
+            if (userInfoService.selectByIdAndPayPassword(String.valueOf(userId), userInfoService.getEncryPayPassword(pay_password)) != 0) {
                 buyOrderService.save(buyOrder);
                 return CommonUtil.successJson();
             }
@@ -84,6 +83,25 @@ public class BuyOrderController {
         return CommonUtil.successJson(pageInfo);
     }
 
+
+    // 返回自己基金数量
+    @GetMapping("/show_has_funds/count")
+    public JSONObject show_has_funds_count(HttpServletRequest request) {
+        int userId = Jwt.getUserId(request);
+        List<BuyOrderJoinHistoryFundJoinFundVo> buyOrderJoinHistoryFundJoinFundVos = buyOrderService.findAllHasBuyFund(userId);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("hasFundCount", buyOrderJoinHistoryFundJoinFundVos.size());
+        return CommonUtil.successJson(jsonObject);
+    }
+
+    // 返回自己的交易次数
+    @GetMapping("/show_busin/count")
+    public JSONObject show_busin_count(HttpServletRequest request) {
+        int userId = Jwt.getUserId(request);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("businCount", buyOrderService.findOrdersWithFundInfo(userId).size() + sellOrderService.findOrdersWithFundInfo(userId).size());
+        return CommonUtil.successJson(jsonObject);
+    }
 
     // 展示自己有什么基金
     @GetMapping("/show_has_funds/{page}")
@@ -119,6 +137,11 @@ public class BuyOrderController {
         return CommonUtil.successJson(jsonObject);
     }
 
+    /**
+     * @author fzb
+     * @date 2019/5/30
+     * @description: 已经取消卖出未确定的基金的价值
+     */
     @GetMapping("/show/buy_amount")
     public JSONObject show_buy_amount(HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
@@ -131,33 +154,34 @@ public class BuyOrderController {
         HashMap not_sure_buy = buyOrderService.getSumByBuyMoney(userId);
 
         // 买入确认后的基金最新价格以及其信息
-        List<BuyOrderJoinHistoryFundJoinFundVo> buyOrderJoinHistoryFundJoinFundVos = buyOrderService.selectOrdersLeftJoinHistoryFundByField(String.valueOf(userId),String.valueOf(1));
+        List<BuyOrderJoinHistoryFundJoinFundVo> buyOrderJoinHistoryFundJoinFundVos = buyOrderService.selectOrdersLeftJoinHistoryFundByField(String.valueOf(userId), String.valueOf(1));
         float sureMoney = 0;
         // 累计计算每个已确定订单的最新价格
-        for(BuyOrderJoinHistoryFundJoinFundVo buyOrderJoinHistoryFundJoinFundVo:buyOrderJoinHistoryFundJoinFundVos){
+        for (BuyOrderJoinHistoryFundJoinFundVo buyOrderJoinHistoryFundJoinFundVo : buyOrderJoinHistoryFundJoinFundVos) {
             // 如果份额大于0的话
-            if(buyOrderJoinHistoryFundJoinFundVo.getResidualShare()>0){
+            if (buyOrderJoinHistoryFundJoinFundVo.getResidualShare() > 0) {
                 // 净值为prices,最后一个值为最新净值
                 String[] prices = buyOrderJoinHistoryFundJoinFundVo.getHistoryPrice().split("-");
                 // 剩余份额*最新净值-服务费
-                sureMoney += buyOrderJoinHistoryFundJoinFundVo.getResidualShare() * Float.parseFloat(prices[prices.length-1]) - buyOrderJoinHistoryFundJoinFundVo.getServiceCharge();
+                // 2019 05 30更新 不用减去手续费
+                sureMoney += buyOrderJoinHistoryFundJoinFundVo.getResidualShare() * Float.parseFloat(prices[prices.length - 1]);
             }
         }
 
         // 设定原价值为0
         float notSureSell = 0;
         // 卖出未确定基金的价值，份额*最新净值
-        List<SellOrderJoinHistoryFund> sellOrderJoinHistoryFunds = sellOrderService.selectOrderWithHistoryFundByField(String.valueOf(userId),String.valueOf(0));
-        for(SellOrderJoinHistoryFund sellOrderJoinHistoryFund:sellOrderJoinHistoryFunds){
-            // 基金的历史净值表
-            String[] prices = sellOrderJoinHistoryFund.getHistoryPrice().split("-");
-            notSureSell += sellOrderJoinHistoryFund.getSellShare()*Float.parseFloat(prices[prices.length-1]);
-        }
+//        List<SellOrderJoinHistoryFund> sellOrderJoinHistoryFunds = sellOrderService.selectOrderWithHistoryFundByField(String.valueOf(userId),String.valueOf(0));
+//        for(SellOrderJoinHistoryFund sellOrderJoinHistoryFund:sellOrderJoinHistoryFunds){
+//            // 基金的历史净值表
+//            String[] prices = sellOrderJoinHistoryFund.getHistoryPrice().split("-");
+//            notSureSell += sellOrderJoinHistoryFund.getSellShare()*Float.parseFloat(prices[prices.length-1]);
+//        }
         // 全部买入的价值
         float from_buy_order_money = 0;
-        if(not_sure_buy!=null){
+        if (not_sure_buy != null) {
             from_buy_order_money = Float.parseFloat(not_sure_buy.get("sumBuy").toString()) + sureMoney + notSureSell;
-        }else {
+        } else {
             from_buy_order_money = sureMoney + notSureSell;
         }
         jsonObject.put("getAllAmount", from_buy_order_money);

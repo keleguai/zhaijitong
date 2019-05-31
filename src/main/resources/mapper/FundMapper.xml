@@ -36,11 +36,16 @@
     </select>
 
     <select id="selectByAll" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
-        SELECT *
+SELECT *
         FROM fund
         WHERE fund_id like CONCAT('%',#{regex},'%')
         OR manager_names like CONCAT('%',#{regex},'%')
         OR fund_name like CONCAT('%',#{regex},'%')
+        OR fund_id in
+        (select fund_id from fund_holding where stock_ids like CONCAT('%',#{regex},'%') )
+        OR fund_id in
+        (select fund_id from fund_holding where stock_ids regexp (select GROUP_CONCAT(stock_id SEPARATOR '|')
+        from stock where stock.NAME like CONCAT('%',#{regex},'%')))
     </select>
 
     <select id="selectByDisStock" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">

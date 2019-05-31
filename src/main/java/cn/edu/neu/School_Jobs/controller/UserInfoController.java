@@ -61,6 +61,7 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findById(uid);
         if (userInfo != null) {
             userInfo.setPayPassword("");
+            userInfo.setPhotoUrl(userInfo.getPhotoUrl()+"?reset=true");
             return CommonUtil.successJsonWithToken(userInfo, Jwt.updateToken(request));
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_779);

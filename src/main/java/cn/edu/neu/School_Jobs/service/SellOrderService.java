@@ -15,7 +15,7 @@ public interface SellOrderService extends Service<SellOrder> {
 
     List<SellOrder> findOrdersWithFundInfo(int userId);
 
-    List<SellOrder> findHistoryOrder(int day, int userId, int confirmSign);
+    List<SellOrder> findHistoryOrder(int day, int userId, String confirmSign,String fundId);
 
     SellOrder initialSellOrder(SellOrder sellOrder,int userId);
 
