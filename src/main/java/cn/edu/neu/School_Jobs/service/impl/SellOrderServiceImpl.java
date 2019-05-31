@@ -48,7 +48,7 @@ public class SellOrderServiceImpl extends AbstractService<SellOrder> implements 
         sellOrder.setSellTime(new Date());
         sellOrder.setSureNet(-1.f);
         sellOrder.setServiceCharge(-1.f);
-        sellOrder.setConfirmSign(false);
+        sellOrder.setConfirmSign(0);
         return sellOrder;
     }
 

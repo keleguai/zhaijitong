@@ -12,7 +12,7 @@
         <result column="sell_share" jdbcType="REAL" property="sellShare"/>
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
-        <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="confirm_sign" jdbcType="INTEGER" property="confirmSign"/>
     </resultMap>
 
     <resultMap id="SellOrderJoinHistoryFund" type="cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund">
@@ -23,7 +23,7 @@
         <result column="sell_share" jdbcType="REAL" property="sellShare"/>
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
-        <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="confirm_sign" jdbcType="INTEGER" property="confirmSign"/>
         <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
         <result column="date" jdbcType="LONGVARCHAR" property="date"/>
         <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
@@ -40,7 +40,7 @@
         <result column="sell_share" jdbcType="REAL" property="sellShare"/>
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
-        <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="confirm_sign" jdbcType="INTEGER" property="confirmSign"/>
         <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
         <result column="manager_ids" jdbcType="VARCHAR" property="managerIds"/>
         <result column="manager_names" jdbcType="VARCHAR" property="managerNames"/>
