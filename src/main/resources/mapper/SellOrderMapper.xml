@@ -13,6 +13,7 @@
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="cancel" jdbcType="BIT" property="cancel"/>
     </resultMap>
 
     <resultMap id="SellOrderJoinHistoryFund" type="cn.edu.neu.School_Jobs.vo.SellOrderJoinHistoryFund">
@@ -27,6 +28,7 @@
         <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
         <result column="date" jdbcType="LONGVARCHAR" property="date"/>
         <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
+        <result column="cancel" jdbcType="BIT" property="cancel"/>
     </resultMap>
 
     <resultMap id="SellOrderJoinFund" type="cn.edu.neu.School_Jobs.vo.SellOrderJoinFundVo">
@@ -52,6 +54,7 @@
         <result column="priority" jdbcType="INTEGER" property="priority"/>
         <result column="disappear" jdbcType="BIT" property="disappear"/>
         <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="cancel" jdbcType="BIT" property="cancel"/>
     </resultMap>
 
 
@@ -73,6 +76,7 @@
             <if test="confirmSign!=null">
                 AND confirm_sign = #{cofirmSign}
             </if>
+            AND cancel = 0
         </where>
     </select>
 
@@ -83,6 +87,7 @@
     from sell_order
     where user_id=#{userId}
     and confirm_sign=1
+    AND cancel = 0
     group by user_id
   </select>
 
@@ -115,6 +120,7 @@
                 AND
                 fund_id = #{fundId}
             </if>
+            AND cancel = 0
         </where>
     </select>
 

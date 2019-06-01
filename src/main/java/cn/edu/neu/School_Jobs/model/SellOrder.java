@@ -30,6 +30,16 @@ public class SellOrder {
     @Column(name = "confirm_sign")
     private Boolean confirmSign;
 
+    @Column(name = "cancel")
+    private Boolean cancel;
+
+    public Boolean getCancel() {
+        return cancel;
+    }
+
+    public void setCancel(Boolean cancel) {
+        this.cancel = cancel;
+    }
     /**
      * @return order_id
      */

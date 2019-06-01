@@ -15,6 +15,7 @@
         <result column="residual_share" jdbcType="REAL" property="residualShare"/>
         <result column="time_confirm" jdbcType="DATE" property="timeConfirm"/>
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
+        <result column="cancel" jdbcType="BIT" property="cancel"/>
     </resultMap>
 
     <resultMap id="BuyOrderLeftJoinFundResult" type="cn.edu.neu.School_Jobs.vo.BuyOrderJoinFundVo">
@@ -39,6 +40,7 @@
         <result column="priority" jdbcType="INTEGER" property="priority"/>
         <result column="disappear" jdbcType="BIT" property="disappear"/>
         <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="cancel" jdbcType="BIT" property="cancel"/>
     </resultMap>
 
     <resultMap id="BuySumAmount" type="java.util.HashMap">
@@ -77,9 +79,11 @@
         <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
         <result column="date" jdbcType="LONGVARCHAR" property="date"/>
         <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
+        <result column="cancel" jdbcType="BIT" property="cancel"/>
     </resultMap>
 
 
+    <!--已经添加取消标识符-->
     <select id="findHistoryOrder" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
         SELECT *
         FROM buy_order
@@ -89,9 +93,10 @@
         user_id =#{userId}
         AND
         confirm_sign = #{confirmSign}
+        AND cancel = 0
     </select>
 
-    <!--找出全部买的订单-->
+    <!--找出全部买的订单，不用添加标识符-->
     <select id="findOrdersWithFundInfo" parameterType="java.lang.Integer" resultMap="BuyOrderLeftJoinFundResult">
         select *
         from buy_order
@@ -101,17 +106,30 @@
         order by time_buying DESC
   </select>
 
+    <!--得到全部买入未确认的价格-->
+    <!--已添加取消标识符-->
     <select id="getSumByBuyMoney" parameterType="java.lang.Integer" resultMap="BuySumAmount">
-    select sum(transaction_amount) as sum_buy from buy_order where user_id = #{userId} and confirm_sign=0 group by user_id
+    select sum(transaction_amount) as sum_buy
+    from buy_order
+    where user_id = #{userId}
+    and confirm_sign=0
+    and cancel=0
+    group by user_id
   </select>
 
-
+    <!--得到所有买入已确认的基金的价值，已经添加取消标识符-->
     <select id="getSumByNetMoney" parameterType="java.lang.Integer" resultMap="BuySumAmount">
-    select sum(confirm_the_net*residual_share-service_charge) as sum_buy from buy_order where user_id = #{userId} and confirm_sign=1 group by user_id
+    select
+    sum(confirm_the_net*residual_share-service_charge) as sum_buy
+    from buy_order
+    where user_id = #{userId}
+    and confirm_sign=1
+    and cancel=0
+    group by user_id
   </select>
 
     <!--// todo 删除-->
-    <!--得到所有金额的钱-->
+    <!--得到所有金额的钱，已添加取消标识符-->
     <select id="getSumByNetMoneyAndFid" parameterType="java.lang.Integer" resultMap="BuySumAmount">
     select
     sum(confirm_the_net*residual_share-service_charge) as sum_buy
@@ -119,6 +137,7 @@
     where user_id = #{userId}
     and confirm_sign=1
     and fund_id=#{fundId}
+    and cancel=0
     group by user_id
   </select>
 
@@ -134,6 +153,7 @@
           <if test="confirm_sign!=null">
               AND confirm_sign = #{confirmSign}
           </if>
+          AND cancel=0
       </where>
     </select>
 
@@ -145,6 +165,7 @@
     from buy_order
     where user_id=#{userId}
     and confirm_sign=1
+    AND cancel=0
     group by fund_id)thisFund
     where thisFund.this_fund_share>0)thisFund
     left join fund on fund.fund_id=thisFund.fund_id)thisFund
@@ -157,6 +178,7 @@
         WHERE fund_id=#{fundId}
         AND confirm_sign=1
         AND user_id=#{userId}
+        AND cancel=0
         ORDER BY time_buying
     </select>
 
