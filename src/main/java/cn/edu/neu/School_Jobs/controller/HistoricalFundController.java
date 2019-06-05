@@ -37,8 +37,8 @@ public class HistoricalFundController {
     }
 
     //todo 展示排行表
-    @RequestMapping(value = "/rank/{day}/{pageNum}", method = RequestMethod.GET)
-    public JSONObject getRank(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "day") int day) {
+    @RequestMapping(value = "/rank/{day}/{pageNum}/{desc}", method = RequestMethod.GET)
+    public JSONObject getRank(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "day") int day,@PathVariable(value = "desc")Boolean desc) {
         List<HistoryFundJoinFundVo> historyFundJoinFundVos = historicalFundService.findFundWithHistoryData();
         // 设置1页的数量
         int pageSize = 5;
@@ -48,6 +48,7 @@ public class HistoricalFundController {
         for (int i = 0; i < loop; i++) {
             // 设置最小值更新以及下标
             Float min = Float.MIN_VALUE;
+            Float max = Float.MAX_VALUE;
             int index = 0;
             for (int j = 0; j < historyFundJoinFundVos.size(); j++) {
                 String[] prices = historyFundJoinFundVos.get(j).getHistoryPrice().split("-");
@@ -55,18 +56,29 @@ public class HistoricalFundController {
                 day = length - 1 > day ? day : length - 1;
                 // 价格变化率
                 float rate = Float.parseFloat(prices[length - 1]) / Float.parseFloat(prices[length - 1 - day]);
-                if (rate > min) {
-                    // 更新最小值和下标
-                    min = rate;
-                    index = j;
+                if(desc){
+                    if (rate > min) {
+                        // 更新最小值和下标
+                        min = rate;
+                        index = j;
+                    }
+                }else {
+                    if(rate < max){
+                        max = rate;
+                        index = j;
+                    }
                 }
             }
             HistoryFundJoinFundVo max_history = historyFundJoinFundVos.get(index);
-            max_history.setHistoryRate(min.toString());
+            if(desc){
+                max_history.setHistoryRate(min.toString());
+            }else {
+                max_history.setHistoryRate(max.toString());
+            }
             max_history.setDate(null);
             max_history.setHistoryPrice(null);
             list.add(historyFundJoinFundVos.get(index));
-            // 弹出最大元素
+            // 弹出最大或者最小元素
             historyFundJoinFundVos.remove(index);
         }
         return CommonUtil.successJson(CommonUtil.pageInfo(pageNum, pageSize, count, list));
