@@ -24,6 +24,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new ProcessInterceptor());
         registry.addInterceptor(authorizationInterceptor)
                 .addPathPatterns("/**")
+                .excludePathPatterns("/reward_info/get_last")
+                .excludePathPatterns("/comment/fund/**")
+                .excludePathPatterns("/comment/manager/**")
+                .excludePathPatterns("/comment/rank/**")
                 .excludePathPatterns("/manager/*")
                 .excludePathPatterns("/fund_manager/**")
                 .excludePathPatterns("/fund_valuation/**")
@@ -35,7 +39,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/fund/**")
                 .excludePathPatterns("/upload/**")
                 .excludePathPatterns("/user/login/**")
-                .excludePathPatterns("/user/activation") // 排除激活页面
+                .excludePathPatterns("/user/activation")
                 .excludePathPatterns("/user/submit-password-reset")
                 .excludePathPatterns("/user/request-password-reset")
                 .excludePathPatterns("/user/reset-password")

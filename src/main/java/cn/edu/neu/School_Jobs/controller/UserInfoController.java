@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.*;
+import java.util.Date;
 import java.util.List;
 
 import cn.edu.neu.School_Jobs.util.CommonUtil;
@@ -61,7 +62,7 @@ public class UserInfoController {
         UserInfo userInfo = userInfoService.findById(uid);
         if (userInfo != null) {
             userInfo.setPayPassword("");
-            userInfo.setPhotoUrl(userInfo.getPhotoUrl()+"?reset=true");
+            userInfo.setPhotoUrl(userInfo.getPhotoUrl()+"?t=t"+new Date().getTime());
             return CommonUtil.successJsonWithToken(userInfo, Jwt.updateToken(request));
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_779);

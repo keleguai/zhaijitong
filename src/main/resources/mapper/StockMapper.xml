@@ -10,6 +10,7 @@
         <result column="opening_price" jdbcType="REAL" property="openingPrice"/>
         <result column="stock_price" jdbcType="REAL" property="stockPrice"/>
         <result column="disappear" jdbcType="BIT" property="disappear"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
     </resultMap>
     <select id="selectByDisappear" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
         SELECT *

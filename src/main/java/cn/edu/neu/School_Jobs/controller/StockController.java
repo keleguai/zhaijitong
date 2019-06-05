@@ -28,7 +28,7 @@ public class StockController {
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
     public JSONObject findStock(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "pageSize") int pageSize) {
 
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(pageNum, 8);
         List<Stock> list = stockService.findAll();
         PageInfo pageInfo = new PageInfo(list);
 
