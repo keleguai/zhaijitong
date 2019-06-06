@@ -23,15 +23,17 @@
     <select id="selectOrderByPriority" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
         SELECT *
         FROM fund
-        ORDER BY priority LIMIT 8
+        WHERE disappear=0
+        ORDER BY priority DESC LIMIT 8
    </select>
 
     <select id="selectByField" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
         SELECT *
         FROM fund
         <where>
-            <if test="type!=null">type like CONCAT('%',#{type},'%')</if>
-            <if test="managerId!=null">manager_ids like CONCAT('%',#{managerId},'%')</if>
+            <if test="type!=null">type like CONCAT('%',#{type},'%') AND</if>
+            <if test="managerId!=null">manager_ids like CONCAT('%',#{managerId},'%') AND</if>
+            disappear=0
         </where>
     </select>
 

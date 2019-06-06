@@ -38,7 +38,7 @@ public class FundController {
     UserInfoService userInfoService;
 
 
-    @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
     public JSONObject findFund(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "pageSize") int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Fund> list = fundService.findAll();
@@ -48,7 +48,7 @@ public class FundController {
 
 
     //仅展示前十名
-    @RequestMapping(value = "/rank/user/{day}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/rank/user/{day}", method = RequestMethod.GET)
     public JSONObject showUser(@PathVariable(value = "day") int day) {
         //找出所有用户
         List<UserInfo> users = userInfoService.findAll();
@@ -101,12 +101,12 @@ public class FundController {
     }
 
     // 通过id取得基金信息
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/{id}", method = RequestMethod.GET)
     public JSONObject fund_id(@PathVariable(value = "id") String id) {
         return CommonUtil.successJson(fundService.findById(id));
     }
 
-    @RequestMapping(value = "/dis/{pageNum}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/dis/{pageNum}", method = RequestMethod.GET)
     public JSONObject allDisFund(@PathVariable(value = "pageNum") int pageNum) {
         PageHelper.startPage(pageNum, 5);
         List<Fund> list = fundService.selectByDisStock();
@@ -114,14 +114,14 @@ public class FundController {
         return CommonUtil.successJson(pageInfo);
     }
 
-    @RequestMapping(value = "/by/{stockId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/by/{stockId}", method = RequestMethod.GET)
     public JSONObject DisFundId(@PathVariable(value = "stockId") String stockId) {
         List<Fund> list = fundService.selectByStockId(stockId);
         return CommonUtil.successJson(list);
     }
 
 
-    @RequestMapping(value = "/type/{pageNum}/{type}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/type/{pageNum}/{type}", method = RequestMethod.GET)
     public JSONObject fund_type(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "type") String type) {
         PageHelper.startPage(pageNum, 12);
         List<Fund> list = fundService.selectByField(type,null);
@@ -129,7 +129,7 @@ public class FundController {
         return CommonUtil.successJson(pageInfo);
     }
 
-    @RequestMapping(value = "/regex/{pageNum}", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/regex/{pageNum}", method = RequestMethod.GET)
     public JSONObject fund_regex(@PathVariable(value = "pageNum") int pageNum, HttpServletRequest request) {
         PageHelper.startPage(pageNum, 12);
         List<Fund> list = fundService.selectByAll(request.getParameter("regex"));
@@ -138,7 +138,7 @@ public class FundController {
     }
 
 
-    @RequestMapping(value = "/priority", method = RequestMethod.GET)
+    @RequestMapping(value = "/general/priority", method = RequestMethod.GET)
     public JSONObject priorityFund() {
         List<Fund> list = fundService.selectOrderByPriority();
         return CommonUtil.successJson(list);
