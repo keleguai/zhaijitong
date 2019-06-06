@@ -71,6 +71,8 @@ public class SellOrderController {
         }
         try{
             // 如果强制转换失败，说明卖出的值非数字
+            // 先转换确认的值
+            requestJson.put("confirmSign",0);
             SellOrder sellOrder = JSONObject.toJavaObject(requestJson, SellOrder.class);
             sellOrder.setUserId(userId);
             // 得到所有已经该客户已经确认买入的这个基金订单
@@ -131,7 +133,11 @@ public class SellOrderController {
         //}catch (CommonJsonException e){
         //    return e.getResultJson();
         //}
-
+        int userId = Jwt.getUserId(request);
+        String payPassword =userInfoService.getEncryPayPassword(requestJson.get("payPassword").toString());
+        if(userInfoService.selectByIdAndPayPassword(String.valueOf(userId),payPassword)==0){
+            return CommonUtil.errorJson(ErrorEnum.E_784);
+        }
         SellOrder sellOrder = JSONObject.toJavaObject(requestJson, SellOrder.class);
 
         sellOrderService.update(sellOrder);

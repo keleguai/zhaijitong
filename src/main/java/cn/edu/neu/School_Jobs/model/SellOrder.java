@@ -28,7 +28,7 @@ public class SellOrder {
     private Float serviceCharge;
 
     @Column(name = "confirm_sign")
-    private Boolean confirmSign;
+    private int confirmSign;
 
     @Column(name = "cancel")
     private Boolean cancel;
@@ -141,14 +141,14 @@ public class SellOrder {
     /**
      * @return confirm_sign
      */
-    public Boolean getConfirmSign() {
+    public int getConfirmSign() {
         return confirmSign;
     }
 
     /**
      * @param confirmSign
      */
-    public void setConfirmSign(Boolean confirmSign) {
+    public void setConfirmSign(int confirmSign) {
         this.confirmSign = confirmSign;
     }
 }

@@ -59,7 +59,7 @@ public class SellOrderJoinFundVo extends SellOrder {
     private Float serviceCharge;
 
     @Column(name = "confirm_sign")
-    private Boolean confirmSign;
+    private int confirmSign;
 
     /**
      * @return order_id
@@ -156,14 +156,14 @@ public class SellOrderJoinFundVo extends SellOrder {
     /**
      * @return confirm_sign
      */
-    public Boolean getConfirmSign() {
+    public int getConfirmSign() {
         return confirmSign;
     }
 
     /**
      * @param confirmSign
      */
-    public void setConfirmSign(Boolean confirmSign) {
+    public void setConfirmSign(int confirmSign) {
         this.confirmSign = confirmSign;
     }
 
