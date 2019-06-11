@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +70,8 @@ public class FundController {
             Float rate = userInfoService.getHistoryRate(userId, day);
             // 放入客户的收益率以及客户信息
             userInfoWithRate.put("getRate", rate);
-            userInfoWithRate.put("userInfo", userInfoService.findById(userId));
+            user.setPhotoUrl(user.getPhotoUrl()+"?t=t"+new Date().getTime());
+            userInfoWithRate.put("userInfo", user);
             // 放入Array中
             jsonArray.add(userInfoWithRate);
         }
