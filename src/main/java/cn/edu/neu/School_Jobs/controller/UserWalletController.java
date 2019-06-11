@@ -1,6 +1,7 @@
 package cn.edu.neu.School_Jobs.controller;
 
 import cn.edu.neu.School_Jobs.model.UserWallet;
+import cn.edu.neu.School_Jobs.service.RedisServer;
 import cn.edu.neu.School_Jobs.service.UserWalletService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -23,6 +24,13 @@ public class UserWalletController {
 
     @Autowired
     UserWalletService userWalletService;
+    @Autowired
+    RedisServer redisServer;
+
+    @GetMapping("/hello")
+    public String helloWorld(@RequestParam(name = "key") String key){
+        return redisServer.testFunction(key);
+    }
 
 
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
