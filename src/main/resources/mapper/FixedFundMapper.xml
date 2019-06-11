@@ -1,18 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.neu.School_Jobs.mapper.FixedFundMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.FixedFund">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="fund_id" jdbcType="VARCHAR" property="fundId" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="week_day" jdbcType="INTEGER" property="weekDay" />
-    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
-    <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime" />
-    <result column="loop" jdbcType="INTEGER" property="loop" />
-    <result column="cancel" jdbcType="TINYINT" property="cancel" />
-    <result column="money" jdbcType="REAL" property="money" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.FixedFund">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="week_day" jdbcType="INTEGER" property="weekDay"/>
+        <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
+        <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime"/>
+        <result column="loop" jdbcType="INTEGER" property="loop"/>
+        <result column="cancel" jdbcType="TINYINT" property="cancel"/>
+        <result column="money" jdbcType="REAL" property="money"/>
+    </resultMap>
+
+    <resultMap id="selfJoinFund" type="cn.edu.neu.School_Jobs.vo.FixedFundJoinFundVo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="week_day" jdbcType="INTEGER" property="weekDay"/>
+        <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
+        <result column="confirm_time" jdbcType="TIMESTAMP" property="confirmTime"/>
+        <result column="loop_time" jdbcType="INTEGER" property="loopTime"/>
+        <result column="cancel" jdbcType="TINYINT" property="cancel"/>
+        <result column="money" jdbcType="REAL" property="money"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
+        <result column="manager_ids" jdbcType="VARCHAR" property="managerIds"/>
+        <result column="manager_names" jdbcType="VARCHAR" property="managerNames"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="sell_rate" jdbcType="VARCHAR" property="sellRate"/>
+        <result column="buying_rate" jdbcType="REAL" property="buyingRate"/>
+        <result column="hosting_fees" jdbcType="REAL" property="hostingFees"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="priority" jdbcType="INTEGER" property="priority"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+    </resultMap>
+
+    <select id="findByUserId" resultMap="selfJoinFund" parameterType="com.alibaba.fastjson.JSONObject">
+    select *
+    from fixed_fund
+    left join fund on fund.fund_id=fixed_fund.fund_id
+    where fixed_fund.user_id=#{userId}
+  </select>
 </mapper>

@@ -58,7 +58,7 @@ public class BuyOrderController {
             Fund fund = fundService.findById(buyOrder.getFundId());
             buyOrder.setServiceCharge(fund.getBuyingRate() * buyOrder.getTransactionAmount());
             // 如果买的金额小于1元，则返回错误
-            if (buyOrder.getTransactionAmount() < 1) {
+            if (buyOrder.getTransactionAmount() < 10) {
                 return CommonUtil.errorJson(ErrorEnum.E_780);
             }
             // 储存买入信息

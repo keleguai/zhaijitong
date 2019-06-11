@@ -1,7 +1,10 @@
 package cn.edu.neu.School_Jobs.controller;
 import cn.edu.neu.School_Jobs.model.FixedFund;
 import cn.edu.neu.School_Jobs.service.FixedFundService;
+import cn.edu.neu.School_Jobs.service.UserInfoService;
 import cn.edu.neu.School_Jobs.util.Jwt;
+import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
+import cn.edu.neu.School_Jobs.vo.FixedFundJoinFundVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,7 @@ public class FixedFundController {
 
     @Autowired
     FixedFundService fixedFundService;
+    UserInfoService userInfoService;
 
 
     @RequestMapping(value = "/list/{pageNum}/{pageSize}",method = RequestMethod.GET)
@@ -38,6 +42,15 @@ public class FixedFundController {
     return CommonUtil.successJson(pageInfo);
     }
 
+    @GetMapping("/find/me/{page}")
+    public JSONObject findMyself(HttpServletRequest request,@PathVariable(value = "page")int page){
+        int userId = Jwt.getUserId(request);
+        PageHelper.startPage(page, 5);
+        List<FixedFundJoinFundVo> fixedFundJoinFundVos = fixedFundService.findByUserId(String.valueOf(userId));
+        PageInfo pageInfo  = new PageInfo(fixedFundJoinFundVos);
+        return CommonUtil.successJson(pageInfo);
+    }
+
     @PostMapping("/add")
     public JSONObject addFixedFund(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         //try{
@@ -45,9 +58,11 @@ public class FixedFundController {
         //}catch (CommonJsonException e){
           //  return e.getResultJson();
         //}
+        int userId = Jwt.getUserId(request);
+
         FixedFund fixedFund = JSONObject.toJavaObject(requestJson,FixedFund.class);
         fixedFund.setId(null);
-        fixedFund.setUserId(Jwt.getUserId(request));
+        fixedFund.setUserId(userId);
         fixedFund.setSendTime(new Date());
         fixedFund.setConfirmTime(null);
         fixedFundService.save(fixedFund);
@@ -68,8 +83,9 @@ public class FixedFundController {
         return CommonUtil.successJson();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public JSONObject deleteFixedFund(@PathVariable(value = "id") int id) {
+
 
         fixedFundService.deleteById(id);
 
