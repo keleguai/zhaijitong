@@ -38,7 +38,7 @@
     </select>
 
     <select id="selectByAll" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
-SELECT *
+        SELECT *
         FROM fund
         WHERE fund_id like CONCAT('%',#{regex},'%')
         OR manager_names like CONCAT('%',#{regex},'%')

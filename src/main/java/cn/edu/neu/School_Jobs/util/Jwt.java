@@ -130,30 +130,6 @@ public class Jwt {
 //            throw new Exception("not user");
     }
 
-    public static Boolean isStudent(HttpServletRequest request) {
-        int type = getUserType(request);
-        if (type == 1) {
-            return true;
-        }
-        return false;
-
-    }
-
-    public static Boolean isSchool(HttpServletRequest request) {
-        int type = getUserType(request);
-        if (type == 2) {
-            return true;
-        }
-        return false;
-    }
-
-    public static Boolean isCompany(HttpServletRequest request) {
-        int type = getUserType(request);
-        if (type == 3) {
-            return true;
-        }
-        return false;
-    }
 
     public static Integer getUserType(HttpServletRequest request) {
         net.minidev.json.JSONObject payload = (net.minidev.json.JSONObject) request.getAttribute("payload");
@@ -162,15 +138,6 @@ public class Jwt {
     }
 
 
-    public static Integer getSubAccountId(HttpServletRequest request) throws Exception {
-        net.minidev.json.JSONObject payload = (net.minidev.json.JSONObject) request.getAttribute("payload");
-//		return (Integer) payload.get("userId");
-        if (payload.containsKey("subAccountId")) {
-            Number num = (Number) payload.get("subAccountId");
-            return num.intValue();
-        } else
-            throw new Exception("not subAccount");
-    }
 
 
 }
