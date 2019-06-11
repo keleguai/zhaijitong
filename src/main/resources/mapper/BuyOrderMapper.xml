@@ -16,7 +16,7 @@
         <result column="time_confirm" jdbcType="DATE" property="timeConfirm"/>
         <result column="confirm_sign" jdbcType="BIT" property="confirmSign"/>
         <result column="cancel" jdbcType="BIT" property="cancel"/>
-        <result column="fix" jdbcType="INTEGER" property="fix"/>
+        <result column="fix_order" jdbcType="INTEGER" property="fixOrder"/>
     </resultMap>
 
     <resultMap id="BuyOrderLeftJoinFundResult" type="cn.edu.neu.School_Jobs.vo.BuyOrderJoinFundVo">
@@ -42,7 +42,7 @@
         <result column="disappear" jdbcType="BIT" property="disappear"/>
         <result column="photo" jdbcType="VARCHAR" property="photo"/>
         <result column="cancel" jdbcType="BIT" property="cancel"/>
-        <result column="fix" jdbcType="INTEGER" property="fix"/>
+        <result column="fix_order" jdbcType="INTEGER" property="fixOrder"/>
 
     </resultMap>
 
@@ -83,7 +83,7 @@
         <result column="date" jdbcType="LONGVARCHAR" property="date"/>
         <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
         <result column="cancel" jdbcType="BIT" property="cancel"/>
-        <result column="fix" jdbcType="INTEGER" property="fix"/>
+        <result column="fix_order" jdbcType="INTEGER" property="fixOrder"/>
 
     </resultMap>
 

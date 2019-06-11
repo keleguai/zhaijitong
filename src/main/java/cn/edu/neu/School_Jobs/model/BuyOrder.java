@@ -50,6 +50,16 @@ public class BuyOrder {
     @Column(name = "sell_out")
     private Boolean sellOut;
 
+    private int fixOrder;
+
+    public int getFixOrder() {
+        return fixOrder;
+    }
+
+    public void setFixOrder(int fixOrder) {
+        this.fixOrder = fixOrder;
+    }
+
     public Boolean getSellOut() {
         return sellOut;
     };
