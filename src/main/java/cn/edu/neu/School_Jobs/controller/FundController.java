@@ -60,7 +60,7 @@ public class FundController {
         // 遍历每个用户
         for (UserInfo user : users) {
             // 如果客户不愿意展示自己的排名,就跳过这位老哥
-            if (!user.getShowMe()) {
+            if (user.getShowMe()==null||!user.getShowMe()) {
                 continue;
             }
             // 得到用户id

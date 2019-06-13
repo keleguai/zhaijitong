@@ -63,6 +63,7 @@ public class UserInfoController {
         if (userInfo != null) {
             userInfo.setPayPassword("");
             userInfo.setPhotoUrl(userInfo.getPhotoUrl()+"?t=t"+new Date().getTime());
+            userInfo = userInfoService.anonymousUserInfo(userInfo);
             return CommonUtil.successJsonWithToken(userInfo, Jwt.updateToken(request));
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_779);
@@ -98,8 +99,14 @@ public class UserInfoController {
         int userId = Jwt.getUserId(request);
         String photoUrl = userInfoService.getEncryPhotoUrl(userId);
         UserInfo userInfo = JSONObject.toJavaObject(requestJson, UserInfo.class);
-        if(userInfo.getPayPassword()!=null){
+        if(userInfo.getPayPassword()!=null&&userInfo.getPayPassword()!=null){
             userInfo.setPayPassword(userInfoService.getEncryPayPassword(userInfo.getPayPassword()));
+        }
+        if(userInfo.getIdentityCard()!=null&&userInfo.getIdentityCard().length()==18){
+            // 由身份证获取年龄
+            userInfo.setAge(userInfoService.computeAge(userInfo.getIdentityCard()));
+            // 由身份证获取性别
+            userInfo.setSex(userInfoService.computeSex(userInfo.getIdentityCard()));
         }
         userInfo.setPhotoUrl("/static/" + photoUrl);
         userInfo.setUserId(Jwt.getUserId(request));

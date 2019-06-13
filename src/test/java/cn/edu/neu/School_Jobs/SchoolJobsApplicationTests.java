@@ -1,6 +1,7 @@
 package cn.edu.neu.School_Jobs;
 
 import cn.edu.neu.School_Jobs.service.RedisServer;
+import cn.edu.neu.School_Jobs.service.ScoreService;
 import cn.edu.neu.School_Jobs.service.UserService;
 import cn.edu.neu.School_Jobs.util.Encryptor;
 import com.alibaba.fastjson.JSONObject;
@@ -21,6 +22,8 @@ public class SchoolJobsApplicationTests {
     private UserService userService;
     @Autowired
     private RedisServer redisServer;
+    @Autowired
+    private ScoreService scoreService;
     @Test
     public void contextLoads() {
 //        Jedis jedis = new Jedis("localhost");
@@ -33,8 +36,8 @@ public class SchoolJobsApplicationTests {
 //        System.out.println(jsonObject1);
 //        //查看服务是否运行
 //        System.out.println("服务正在运行：" + jedis.ping());
-        System.out.println(redisServer.testFunction("111"));
-
+//        System.out.println(redisServer.testFunction("111"));
+//System.out.println(scoreService.findByGrade("true"));
 //        System.out.println(userService.selectAllByPhone("18689952277"));
     }
 

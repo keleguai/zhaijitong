@@ -76,7 +76,8 @@ public class HistoricalFundController {
                 max_history.setHistoryRate(max.toString());
             }
             max_history.setDate(null);
-            max_history.setHistoryPrice(null);
+            String[] prices = max_history.getHistoryPrice().split("-");
+            max_history.setHistoryPrice(prices[prices.length-1]);
             list.add(historyFundJoinFundVos.get(index));
             // 弹出最大或者最小元素
             historyFundJoinFundVos.remove(index);

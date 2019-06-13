@@ -14,4 +14,5 @@ public interface UserInfoService extends Service<UserInfo> {
     int selectByIdAndPayPassword(String userId,String payPassword);
     int computeAge(String IdNO);
     String computeSex(String IdNo);
+    UserInfo anonymousUserInfo(UserInfo userInfo);
 }

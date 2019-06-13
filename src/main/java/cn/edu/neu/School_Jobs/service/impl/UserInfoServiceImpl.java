@@ -120,4 +120,18 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
         jsonObject.put("payPassword",payPassword);
         return userInfoMapper.selectByIdAndPayPassword(jsonObject);
     }
+    @Override
+    public UserInfo anonymousUserInfo(UserInfo userInfo){
+//        String identityCard = userInfo.getIdentityCard();
+//        String anonymousIdentity = "";
+//        if(identityCard.length()==18){
+//            anonymousIdentity = "**************"+identityCard.substring(14,18);
+//        }
+//        userInfo.setIdentityCard(anonymousIdentity);
+//        if(userInfo.getName()!=null){
+//            userInfo.setName(userInfo.getName().substring(0,1)+"**");
+//        }
+        userInfo.setPayPassword(null);
+        return userInfo;
+    }
 }

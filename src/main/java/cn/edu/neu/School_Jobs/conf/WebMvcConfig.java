@@ -24,6 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(new ProcessInterceptor());
         registry.addInterceptor(authorizationInterceptor)
                 .addPathPatterns("/**")
+                .excludePathPatterns("/score/list/**")
                 .excludePathPatterns("/user_wallet/**")
                 .excludePathPatterns("/reward_info/get_last")
                 .excludePathPatterns("/comment/fund/**")

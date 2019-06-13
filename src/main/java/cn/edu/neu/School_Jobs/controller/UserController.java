@@ -1,6 +1,8 @@
 package cn.edu.neu.School_Jobs.controller;
 
 import cn.edu.neu.School_Jobs.model.User;
+import cn.edu.neu.School_Jobs.model.UserInfo;
+import cn.edu.neu.School_Jobs.service.UserInfoService;
 import cn.edu.neu.School_Jobs.service.UserService;
 import cn.edu.neu.School_Jobs.util.Encryptor;
 import cn.edu.neu.School_Jobs.util.Jwt;
@@ -33,6 +35,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserInfoService userInfoService;
 
 
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
@@ -75,13 +79,17 @@ public class UserController {
         //}
 
         User user = JSONObject.toJavaObject(requestJson, User.class);
+        UserInfo userInfo = JSONObject.toJavaObject(requestJson, UserInfo.class);
         if (userService.selectByPhone(requestJson.getString("phone_number")) == 0) {
             user.setUserType(0);
             user.setPassword(Encryptor.encrypt(user.getPassword(), user.getPhoneNumber()));
+            userInfo.setPhotoUrl("/static/default.jpg");
             userService.save(user);
             Map<String, Object> payload = new HashMap<String, Object>();
             List<User> thisUser = userService.selectAllByPhone(requestJson.getString("phone_number"));
             Date date = new Date();
+            userInfo.setUserId(thisUser.get(0).getUserId());
+            userInfoService.save(userInfo);
             payload.put("userId", thisUser.get(0).getUserId());//用户ID
             payload.put("startTime", date.getTime());//生成时间
             payload.put("expiryTime", date.getTime() + Constants.EXPIRY_TIME);//过期时间1小时

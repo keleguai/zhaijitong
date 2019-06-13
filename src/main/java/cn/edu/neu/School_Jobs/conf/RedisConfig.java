@@ -42,7 +42,6 @@ public class RedisConfig {
     }
     @Bean
     public Jedis getJedis(){
-        JedisPoolConfig config = getRedisConfig();
         Jedis jedis = new Jedis(host);
         log.info("init JredisPool ...");
         return jedis;

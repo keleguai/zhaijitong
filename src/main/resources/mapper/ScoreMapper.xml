@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.neu.School_Jobs.mapper.ScoreMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.Score">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="stock_id" jdbcType="VARCHAR" property="stockId"/>
+        <result column="grade" jdbcType="INTEGER" property="grade"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="manager_id" jdbcType="INTEGER" property="managerId"/>
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+    <resultMap id="HistoryFundJoinFund" type="cn.edu.neu.School_Jobs.vo.FundInfoJoinGradeVo">
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="history_price" jdbcType="LONGVARCHAR" property="historyPrice"/>
+        <result column="date" jdbcType="LONGVARCHAR" property="date"/>
+        <result column="history_rate" jdbcType="LONGVARCHAR" property="historyRate"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
+        <result column="manager_ids" jdbcType="VARCHAR" property="managerIds"/>
+        <result column="manager_names" jdbcType="VARCHAR" property="managerNames"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="sell_rate" jdbcType="VARCHAR" property="sellRate"/>
+        <result column="buying_rate" jdbcType="REAL" property="buyingRate"/>
+        <result column="hosting_fees" jdbcType="REAL" property="hostingFees"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="priority" jdbcType="INTEGER" property="priority"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="grade" jdbcType="REAL" property="grade"/>
+    </resultMap>
+    <select id="selectCountByField" resultType="java.lang.Integer" parameterType="com.alibaba.fastjson.JSONObject">
+        SELECT COUNT(*)
+        FROM score
+        <where>
+            <if test="userId!=null">
+                user_id=#{userId}
+            </if>
+            <if test="fundId!=null">
+                AND fund_id=#{fundId}
+            </if>
+        </where>
+    </select>
+    <select id="findByGrade" resultMap="HistoryFundJoinFund" parameterType="com.alibaba.fastjson.JSONObject">
+        select sum(grade)/count(grade) as grade,fund.* from score right join fund
+        on fund.fund_id=score.fund_id left join historical_fund hf on fund.fund_id = hf.fund_id
+        group by fund.fund_id
+        order by grade
+        <if test="desc!=null">
+             desc
+        </if>
+    </select>
+</mapper>
