@@ -134,4 +134,18 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
         userInfo.setPayPassword(null);
         return userInfo;
     }
+
+    @Override
+    public List<UserInfo> findFriendByUserId(String userId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", userId);
+        return userInfoMapper.findFriendByUserId(jsonObject);
+    }
+
+    @Override
+    public List<UserInfo> findIsAddingFriend(String userId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", userId);
+        return userInfoMapper.findIsAddingFriend(jsonObject);
+    }
 }

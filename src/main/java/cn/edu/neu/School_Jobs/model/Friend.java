@@ -1,5 +1,6 @@
 package cn.edu.neu.School_Jobs.model;
 
+import java.util.Date;
 import javax.persistence.*;
 
 public class Friend {
@@ -16,6 +17,9 @@ public class Friend {
     private Byte be;
 
     private Byte del;
+
+    @Column(name = "insert_time")
+    private Date insertTime;
 
     /**
      * @return id
@@ -85,5 +89,19 @@ public class Friend {
      */
     public void setDel(Byte del) {
         this.del = del;
+    }
+
+    /**
+     * @return insert_time
+     */
+    public Date getInsertTime() {
+        return insertTime;
+    }
+
+    /**
+     * @param insertTime
+     */
+    public void setInsertTime(Date insertTime) {
+        this.insertTime = insertTime;
     }
 }

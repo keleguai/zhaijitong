@@ -19,7 +19,20 @@
         <result column="show_me" jdbcType="BIT" property="showMe"/>
     </resultMap>
 
-    <select id="selectByIdAndPayPassword"  parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
+    <select id="selectByIdAndPayPassword" parameterType="com.alibaba.fastjson.JSONObject"
+            resultType="java.lang.Integer">
         SELECT COUNT(*) FROM user_info where user_id=#{userId} and pay_password=#{payPassword}
+    </select>
+    <select id="findFriendByUserId" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT f1.friend_id,user_info.* from friend f1,friend f2 left join user_info on friend_id=user_info.user_id
+        WHERE f1.user_id = f2.friend_id
+        and f1.friend_id=f2.user_id
+        and f2.user_id=#{userId}
+    </select>
+    <select id="findIsAddingFriend" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT f1.friend_id,user_info.* from friend f1,friend f2 left join user_info on friend_id=user_info.user_id
+        WHERE f1.user_id != f2.friend_id
+        and f1.friend_id=f2.user_id
+        and f1.user_id=#{userId}
     </select>
 </mapper>

@@ -10,5 +10,30 @@
     <result column="friend_id" jdbcType="INTEGER" property="friendId" />
     <result column="be" jdbcType="TINYINT" property="be" />
     <result column="del" jdbcType="TINYINT" property="del" />
+      <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
   </resultMap>
+    <select id="findHasSend" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM friend
+    WHERE user_id=#{userId}
+    AND friend_id=#{friendId}
+  </select>
+    <select id="findReadyAgreeFriend" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        select * from friend
+        <where>
+            <if test="userId!=null">
+                user_id=#{userId}
+            </if>
+            <if test="friendId!=null">
+                friend_id=#{friendId}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteFriendByUserIdAndFriendId" parameterType="com.alibaba.fastjson.JSONObject">
+    delete from friend
+    where
+    (user_id=#{userId} and friend_id=#{friendId})
+    or
+    (user_id=#{friendId} and friend_id=#{userId})
+  </delete>
 </mapper>
