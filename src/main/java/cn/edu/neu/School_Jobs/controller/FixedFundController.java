@@ -29,6 +29,7 @@ public class FixedFundController {
 
     @Autowired
     FixedFundService fixedFundService;
+    @Autowired
     UserInfoService userInfoService;
 
 
@@ -58,8 +59,16 @@ public class FixedFundController {
         //}catch (CommonJsonException e){
           //  return e.getResultJson();
         //}
-        int userId = Jwt.getUserId(request);
 
+        int userId = Jwt.getUserId(request);
+        if (userInfoService.lockPayPassword(userId)) {
+            return CommonUtil.errorJson(ErrorEnum.E_794);
+        }
+        String payPassword = userInfoService.getEncryPayPassword(requestJson.get("pay_password").toString());
+        if (userInfoService.selectByIdAndPayPassword(String.valueOf(userId), payPassword) == 0) {
+            return CommonUtil.errorJson(userInfoService.addLockPayPassword(userId));
+            //            return CommonUtil.errorJson(ErrorEnum.E_784);
+        }
         FixedFund fixedFund = JSONObject.toJavaObject(requestJson,FixedFund.class);
         fixedFund.setId(null);
         fixedFund.setUserId(userId);

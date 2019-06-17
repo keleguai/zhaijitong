@@ -65,9 +65,13 @@ public class SellOrderController {
     public JSONObject addSellOrder(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         // 得到用户id
         int userId = Jwt.getUserId(request);
+        if (userInfoService.lockPayPassword(userId)) {
+            return CommonUtil.errorJson(ErrorEnum.E_794);
+        }
         String payPassword =userInfoService.getEncryPayPassword(requestJson.get("payPassword").toString());
         if(userInfoService.selectByIdAndPayPassword(String.valueOf(userId),payPassword)==0){
-            return CommonUtil.errorJson(ErrorEnum.E_784);
+            return CommonUtil.errorJson(userInfoService.addLockPayPassword(userId));
+            //            return CommonUtil.errorJson(ErrorEnum.E_784);
         }
         try{
             // 如果强制转换失败，说明卖出的值非数字
@@ -133,10 +137,15 @@ public class SellOrderController {
         //}catch (CommonJsonException e){
         //    return e.getResultJson();
         //}
+
         int userId = Jwt.getUserId(request);
+        if (userInfoService.lockPayPassword(userId)) {
+            return CommonUtil.errorJson(ErrorEnum.E_794);
+        }
         String payPassword =userInfoService.getEncryPayPassword(requestJson.get("payPassword").toString());
         if(userInfoService.selectByIdAndPayPassword(String.valueOf(userId),payPassword)==0){
-            return CommonUtil.errorJson(ErrorEnum.E_784);
+            return CommonUtil.errorJson(userInfoService.addLockPayPassword(userId));
+            //            return CommonUtil.errorJson(ErrorEnum.E_784);
         }
         SellOrder sellOrder = JSONObject.toJavaObject(requestJson, SellOrder.class);
 

@@ -40,4 +40,12 @@ public class CommentServiceImpl extends AbstractService<Comment> implements Comm
         return commentMapper.findNoReadCount(jsonObject);
     }
 
+    @Override
+    public List<CommentWithUserInfo> findFriendChat(String userId, String friendId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", userId);
+        jsonObject.put("friendId", friendId);
+        return commentMapper.findFriendChat(jsonObject);
+    }
+
 }

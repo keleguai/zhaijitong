@@ -37,6 +37,15 @@ public class CommentController {
         return CommonUtil.successJson(pageInfo);
     }
 
+    @GetMapping("/friend/chat/{friendId}/{page}")
+    public JSONObject getChat(HttpServletRequest request, @PathVariable(value = "friendId") String friendId, @PathVariable(value = "page") int page) {
+        int userId = Jwt.getUserId(request);
+        PageHelper.startPage(page, 5);
+        List<CommentWithUserInfo> list = commentService.findFriendChat(String.valueOf(userId), friendId);
+        PageInfo pageInfo = new PageInfo(list);
+        return CommonUtil.successJson(pageInfo);
+    }
+
     @GetMapping("/fund/{fundId}/{page}")
     public JSONObject getFundComment(@PathVariable(value = "fundId") String fundId, @PathVariable(value = "page") int page) {
         PageHelper.startPage(page, 5);

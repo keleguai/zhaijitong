@@ -2,6 +2,7 @@ package cn.edu.neu.School_Jobs.service;
 
 import cn.edu.neu.School_Jobs.model.UserInfo;
 import cn.edu.neu.School_Jobs.util.Service;
+import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 
 import java.util.List;
 
@@ -21,4 +22,8 @@ public interface UserInfoService extends Service<UserInfo> {
     List<UserInfo> findFriendByUserId(String userId);
 
     List<UserInfo> findIsAddingFriend(String userId);
+
+    Boolean lockPayPassword(int uid);
+
+    ErrorEnum addLockPayPassword(int uid);
 }

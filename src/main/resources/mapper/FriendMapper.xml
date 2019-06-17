@@ -10,6 +10,7 @@
     <result column="friend_id" jdbcType="INTEGER" property="friendId" />
     <result column="be" jdbcType="TINYINT" property="be" />
     <result column="del" jdbcType="TINYINT" property="del" />
+      <result column="text" jdbcType="LONGVARCHAR" property="text"/>
       <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
   </resultMap>
     <select id="findHasSend" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">

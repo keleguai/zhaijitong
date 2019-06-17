@@ -5,12 +5,10 @@ import cn.edu.neu.School_Jobs.model.BuyOrder;
 import cn.edu.neu.School_Jobs.model.HistoricalFund;
 import cn.edu.neu.School_Jobs.model.SellOrder;
 import cn.edu.neu.School_Jobs.model.UserInfo;
-import cn.edu.neu.School_Jobs.service.BuyOrderService;
-import cn.edu.neu.School_Jobs.service.HistoricalFundService;
-import cn.edu.neu.School_Jobs.service.SellOrderService;
-import cn.edu.neu.School_Jobs.service.UserInfoService;
+import cn.edu.neu.School_Jobs.service.*;
 import cn.edu.neu.School_Jobs.util.AbstractService;
 import cn.edu.neu.School_Jobs.util.Encryptor;
+import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,34 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
     SellOrderService sellOrderService;
     @Autowired
     HistoricalFundService historicalFundService;
+    @Autowired
+    RedisServer redisServer;
+
+    @Override
+    public Boolean lockPayPassword(int uid) {
+        String key = String.valueOf(uid) + "_pay";
+        return redisServer.get(key) != null && Integer.parseInt(redisServer.get(key).getString("count")) >= 3;
+    }
+
+    @Override
+    public ErrorEnum addLockPayPassword(int uid) {
+        String key = String.valueOf(uid) + "_pay";
+        JSONObject jsonObject = new JSONObject();
+        if (redisServer.get(key) == null) {
+            jsonObject.put("count", 1);
+            redisServer.set(key, jsonObject.toString(), 60 * 60 * 24);
+            return ErrorEnum.E_791;
+        } else {
+            int errorCount = redisServer.get(key).getIntValue("count") + 1;
+            jsonObject.put("count", errorCount);
+            redisServer.set(key, jsonObject.toString(), 60 * 60 * 24);
+            if (errorCount == 2) {
+                return ErrorEnum.E_792;
+            } else {
+                return ErrorEnum.E_793;
+            }
+        }
+    }
 
     @Override
     public float getHistoryRate(int userId, int day) {

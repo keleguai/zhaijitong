@@ -12,4 +12,6 @@ import java.util.List;
 public interface CommentService extends Service<Comment> {
     List<CommentWithUserInfo> findUserInfoWithCommentByField(String fundId,String managerId,String rankId,String userId,String isRead);
     int findNoReadCount(String userId,String isRead);
+
+    List<CommentWithUserInfo> findFriendChat(String userId, String friendId);
 }

@@ -10,4 +10,6 @@ import java.util.List;
 public interface CommentMapper extends MyMapper<Comment> {
     List<CommentWithUserInfo> findUserInfoWithCommentByField(JSONObject jsonObject);
     int findNoReadCount(JSONObject jsonObject);
+
+    List<CommentWithUserInfo> findFriendChat(JSONObject jsonObject);
 }

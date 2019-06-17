@@ -83,4 +83,15 @@
       </if>
     </where>
   </select>
+
+    <select id="findFriendChat" parameterType="com.alibaba.fastjson.JSONObject" resultMap="CommentWithUserInfo">
+    SELECT * FROM
+    comment
+    left join user_info on user_info.user_id=comment.user_id
+    where
+    (comment.user_id=#{userId} and reply_user_id=#{friendId})
+    or
+    (comment.user_id=#{friendId} and reply_user_id=#{userId})
+    order by insert_time desc
+  </select>
 </mapper>

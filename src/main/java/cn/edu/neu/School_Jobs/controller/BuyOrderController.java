@@ -2,10 +2,7 @@ package cn.edu.neu.School_Jobs.controller;
 
 import cn.edu.neu.School_Jobs.model.BuyOrder;
 import cn.edu.neu.School_Jobs.model.Fund;
-import cn.edu.neu.School_Jobs.service.BuyOrderService;
-import cn.edu.neu.School_Jobs.service.FundService;
-import cn.edu.neu.School_Jobs.service.SellOrderService;
-import cn.edu.neu.School_Jobs.service.UserInfoService;
+import cn.edu.neu.School_Jobs.service.*;
 import cn.edu.neu.School_Jobs.util.CommonUtil;
 import cn.edu.neu.School_Jobs.util.Jwt;
 import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
@@ -35,6 +32,8 @@ public class BuyOrderController {
     private SellOrderService sellOrderService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private RedisServer redisServer;
 
 
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
@@ -49,10 +48,14 @@ public class BuyOrderController {
     @PostMapping("/add")
     public JSONObject addBuyOrder(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         try {
+            int userId = Jwt.getUserId(request);
+            //错误次数达到上上限
+            if (userInfoService.lockPayPassword(userId)) {
+                return CommonUtil.errorJson(ErrorEnum.E_794);
+            }
             String pay_password = requestJson.getString("pay_password");
             // 强制类型转换的时候失败是由于字符串
             BuyOrder buyOrder = JSONObject.toJavaObject(requestJson, BuyOrder.class);
-            int userId = Jwt.getUserId(request);
             buyOrder = buyOrderService.initialBuyOrderForInsert(buyOrder, userId);
             //        计算手续费
             Fund fund = fundService.findById(buyOrder.getFundId());
@@ -66,7 +69,8 @@ public class BuyOrderController {
                 buyOrderService.save(buyOrder);
                 return CommonUtil.successJson();
             }
-            return CommonUtil.errorJson(ErrorEnum.E_784);
+            return CommonUtil.errorJson(userInfoService.addLockPayPassword(userId));
+//            return CommonUtil.errorJson(ErrorEnum.E_784);
         } catch (Exception e) {
             return CommonUtil.errorJson(ErrorEnum.E_781);
         }
@@ -190,7 +194,16 @@ public class BuyOrderController {
 
 
     @PostMapping("/update")
-    public JSONObject updateBuyOrder(@RequestBody JSONObject requestJson) {
+    public JSONObject updateBuyOrder(@RequestBody JSONObject requestJson, HttpServletRequest request) {
+        int userId = Jwt.getUserId(request);
+        if (userInfoService.lockPayPassword(userId)) {
+            return CommonUtil.errorJson(ErrorEnum.E_794);
+        }
+        String payPassword = userInfoService.getEncryPayPassword(requestJson.get("payPassword").toString());
+        if (userInfoService.selectByIdAndPayPassword(String.valueOf(userId), payPassword) == 0) {
+            return CommonUtil.errorJson(userInfoService.addLockPayPassword(userId));
+            //            return CommonUtil.errorJson(ErrorEnum.E_784);
+        }
         BuyOrder buyOrder = JSONObject.toJavaObject(requestJson, BuyOrder.class);
         buyOrderService.update(buyOrder);
         return CommonUtil.successJson();

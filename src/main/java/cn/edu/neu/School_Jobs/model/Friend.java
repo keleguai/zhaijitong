@@ -21,6 +21,8 @@ public class Friend {
     @Column(name = "insert_time")
     private Date insertTime;
 
+    private String text;
+
     /**
      * @return id
      */
@@ -103,5 +105,19 @@ public class Friend {
      */
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
+    }
+
+    /**
+     * @return text
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * @param text
+     */
+    public void setText(String text) {
+        this.text = text;
     }
 }

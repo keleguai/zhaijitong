@@ -24,6 +24,8 @@ public class SchoolJobsApplicationTests {
     private RedisServer redisServer;
     @Autowired
     private ScoreService scoreService;
+    @Autowired
+    private Jedis jedis;
     @Test
     public void contextLoads() {
 //        Jedis jedis = new Jedis("localhost");
@@ -39,6 +41,12 @@ public class SchoolJobsApplicationTests {
 //        System.out.println(redisServer.testFunction("111"));
 //System.out.println(scoreService.findByGrade("true"));
 //        System.out.println(userService.selectAllByPhone("18689952277"));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("count", 1);
+        jsonObject.put("keke", 2);
+        redisServer.set("test", jsonObject.toString(), 300);
+
+        System.out.println(redisServer.get("aaa") == null);
     }
 
     @Test
