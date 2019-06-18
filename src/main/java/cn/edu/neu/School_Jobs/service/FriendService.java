@@ -14,4 +14,6 @@ public interface FriendService extends Service<Friend> {
     List<Friend> findReadyAgreeFriend(String userId, String friendId);
 
     int deleteFriendByUserIdAndFriendId(String userId, String friendId);
+
+    int findIsFriend(String userId, String friendId);
 }

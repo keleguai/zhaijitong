@@ -42,6 +42,17 @@ public class FriendController {
     return CommonUtil.successJson(pageInfo);
     }
 
+    @GetMapping("/is/friend/{friendId}")
+    public JSONObject findIsFriend(HttpServletRequest request, @PathVariable(value = "friendId") String friendId) {
+        JSONObject jsonObject = new JSONObject();
+        if (friendService.findIsFriend(String.valueOf(Jwt.getUserId(request)), friendId) == 2) {
+            jsonObject.put("isFriend", true);
+            return CommonUtil.successJson(jsonObject);
+        }
+        jsonObject.put("isFriend", false);
+        return CommonUtil.successJson(jsonObject);
+    }
+
     @GetMapping("/me/{page}")
     public JSONObject findMyFriend(HttpServletRequest request, @PathVariable(value = "page") int page) {
         PageHelper.startPage(page, 5);

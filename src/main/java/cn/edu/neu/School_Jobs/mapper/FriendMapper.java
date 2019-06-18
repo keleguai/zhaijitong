@@ -12,4 +12,6 @@ public interface FriendMapper extends MyMapper<Friend> {
     List<Friend> findReadyAgreeFriend(JSONObject jsonObject);
 
     int deleteFriendByUserIdAndFriendId(JSONObject jsonObject);
+
+    int findIsFriend(JSONObject jsonObject);
 }

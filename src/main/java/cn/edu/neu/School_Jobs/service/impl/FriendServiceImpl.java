@@ -22,6 +22,13 @@ public class FriendServiceImpl extends AbstractService<Friend> implements Friend
     private FriendMapper friendMapper;
 
     @Override
+    public int findIsFriend(String userId, String friendId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", userId);
+        jsonObject.put("friendId", friendId);
+        return friendMapper.findIsFriend(jsonObject);
+    }
+    @Override
     public int findHasSend(String userId, String friendId) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userId", userId);

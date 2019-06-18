@@ -37,4 +37,11 @@
     or
     (user_id=#{friendId} and friend_id=#{userId})
   </delete>
+    <select id="findIsFriend" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
+        select count(*) from friend
+        where
+        (user_id=#{userId} and friend_id=#{friendId})
+        or
+        (user_id=#{friendId} and friend_id=#{userId})
+    </select>
 </mapper>
