@@ -119,7 +119,7 @@ public class UserInfoController {
     public JSONObject upload(HttpServletRequest request, @RequestParam("file") MultipartFile picture) throws IOException {
         int userId = Jwt.getUserId(request);
         String photoUrl = userInfoService.getEncryPhotoUrl(userId);
-        File f = new File("C:/Users/cole/Downloads/nginx-1.16.0/html/static/" + photoUrl);
+        File f = new File("C:/Users/cole/Downloads/nginx-1.16.0/html/static/user/" + photoUrl);
         BufferedOutputStream out = null;
         out = new BufferedOutputStream(new FileOutputStream(f));
         out.write(picture.getBytes());

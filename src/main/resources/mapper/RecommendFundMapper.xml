@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.neu.School_Jobs.mapper.RecommendFundMapper">
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.RecommendFund">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="grade" jdbcType="REAL" property="grade"/>
+    </resultMap>
+    <resultMap id="FundInfoJoinRecommend" type="cn.edu.neu.School_Jobs.vo.RecommendWIthFundVo">
+        <id column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="grade" jdbcType="REAL" property="grade"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
+        <result column="manager_ids" jdbcType="VARCHAR" property="managerIds"/>
+        <result column="manager_names" jdbcType="VARCHAR" property="managerNames"/>
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="sell_rate" jdbcType="VARCHAR" property="sellRate"/>
+        <result column="buying_rate" jdbcType="REAL" property="buyingRate"/>
+        <result column="hosting_fees" jdbcType="REAL" property="hostingFees"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="priority" jdbcType="INTEGER" property="priority"/>
+        <result column="disappear" jdbcType="BIT" property="disappear"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+    </resultMap>
+    <select id="findByGrade" resultMap="FundInfoJoinRecommend" parameterType="com.alibaba.fastjson.JSONObject">
+    SELECT * FROM recommend_fund left join fund on fund.fund_id=recommend_fund.fund_id
+    WHERE recommend_fund.user_id=#{userId} ORDER BY recommend_fund.grade DESC
+  </select>
+</mapper>

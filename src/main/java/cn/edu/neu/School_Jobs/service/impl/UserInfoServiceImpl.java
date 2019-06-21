@@ -9,6 +9,7 @@ import cn.edu.neu.School_Jobs.service.*;
 import cn.edu.neu.School_Jobs.util.AbstractService;
 import cn.edu.neu.School_Jobs.util.Encryptor;
 import cn.edu.neu.School_Jobs.util.constants.ErrorEnum;
+import cn.edu.neu.School_Jobs.vo.LikePeopleJoinUserInfoVo;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,10 @@ public class UserInfoServiceImpl extends AbstractService<UserInfo> implements Us
         return redisServer.get(key) != null && Integer.parseInt(redisServer.get(key).getString("count")) >= 3;
     }
 
+    @Override
+    public List<LikePeopleJoinUserInfoVo> findLikePeople(String userId) {
+        return userInfoMapper.findLikePeople(userId);
+    }
     @Override
     public ErrorEnum addLockPayPassword(int uid) {
         String key = String.valueOf(uid) + "_pay";

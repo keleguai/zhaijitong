@@ -18,6 +18,25 @@
         <result column="autograph" jdbcType="VARCHAR" property="autograph"/>
         <result column="show_me" jdbcType="BIT" property="showMe"/>
     </resultMap>
+    <resultMap id="BaseResultMapWithLike" type="cn.edu.neu.School_Jobs.vo.LikePeopleJoinUserInfoVo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="question_result" jdbcType="VARCHAR" property="questionResult"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
+        <result column="identity_card" jdbcType="VARCHAR" property="identityCard"/>
+        <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber"/>
+        <result column="pay_password" jdbcType="VARCHAR" property="payPassword"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="autograph" jdbcType="VARCHAR" property="autograph"/>
+        <result column="show_me" jdbcType="BIT" property="showMe"/>
+        <result column="like_id" jdbcType="INTEGER" property="likeId"/>
+        <result column="grade" jdbcType="REAL" property="grade"/>
+    </resultMap>
 
     <select id="selectByIdAndPayPassword" parameterType="com.alibaba.fastjson.JSONObject"
             resultType="java.lang.Integer">
@@ -34,5 +53,9 @@
         WHERE f1.user_id != f2.friend_id
         and f1.friend_id=f2.user_id
         and f1.user_id=#{userId}
+    </select>
+    <select id="findLikePeople" parameterType="java.lang.String" resultMap="BaseResultMapWithLike">
+        select * from like_people left join user_info on user_info.user_id=like_people.like_id
+        where like_people.user_id=#{userId} and like_people.user_id!=like_people.like_id
     </select>
 </mapper>

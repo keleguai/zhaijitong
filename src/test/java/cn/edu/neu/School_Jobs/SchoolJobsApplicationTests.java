@@ -1,10 +1,11 @@
 package cn.edu.neu.School_Jobs;
 
-import cn.edu.neu.School_Jobs.service.RedisServer;
-import cn.edu.neu.School_Jobs.service.ScoreService;
-import cn.edu.neu.School_Jobs.service.UserService;
+import cn.edu.neu.School_Jobs.model.Recommend;
+import cn.edu.neu.School_Jobs.model.UserInfo;
+import cn.edu.neu.School_Jobs.service.*;
 import cn.edu.neu.School_Jobs.util.Encryptor;
 import cn.edu.neu.School_Jobs.util.Jwt;
+import cn.edu.neu.School_Jobs.vo.RecommendWIthFundVo;
 import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.Payload;
@@ -18,10 +19,11 @@ import redis.clients.jedis.Jedis;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
-//@RunWith(SpringRunner.class)
-//@SpringBootTest
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class SchoolJobsApplicationTests {
     @Autowired
     private UserService userService;
@@ -31,6 +33,12 @@ public class SchoolJobsApplicationTests {
     private ScoreService scoreService;
     @Autowired
     private Jedis jedis;
+    @Autowired
+    private UserInfoService userInfoService;
+    @Autowired
+    private RecommendService recommendService;
+    @Autowired
+    private RecommendFundService recommendFundService;
     @Test
     public void contextLoads() throws ParseException {
 //        Jedis jedis = new Jedis("localhost");
@@ -52,11 +60,20 @@ public class SchoolJobsApplicationTests {
 //        redisServer.set("test", jsonObject.toString(), 300);
 //
 //        System.out.println(redisServer.get("aaa") == null);
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNTYwNzc0MjI3NzIwLCJzdGFydFRpbWUiOjE1NjA3NzA2Mjc3MjAsInR5cGUiOjAsInVzZXJJZCI6MX0.NXyGUsU-tD39nAlMukRKoQ1msEnatRheheJX8-afEdA";
-        Map<String, Object> result = Jwt.validToken(token);
-        JWSObject jwsObject = JWSObject.parse(token);
-        Payload payload = jwsObject.getPayload();
-        System.out.println(payload.toJSONObject().getAsString("userId"));
+//        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHBpcnlUaW1lIjoxNTYwNzc0MjI3NzIwLCJzdGFydFRpbWUiOjE1NjA3NzA2Mjc3MjAsInR5cGUiOjAsInVzZXJJZCI6MX0.NXyGUsU-tD39nAlMukRKoQ1msEnatRheheJX8-afEdA";
+//        Map<String, Object> result = Jwt.validToken(token);
+//        JWSObject jwsObject = JWSObject.parse(token);
+//        Payload payload = jwsObject.getPayload();
+//        System.out.println(payload.toJSONObject().getAsString("userId"));
+//        System.out.println(userInfoService.findLikePeople("1"));
+//        for(UserInfo userInfo : userInfoService.findAll()){
+//            userInfo.setPhotoUrl("/static/user/"+userInfoService.getEncryPhotoUrl(userInfo.getUserId()));
+//            userInfoService.update(userInfo);
+//        }
+//        Recommend recommend = new Recommend();
+//        recommendService.save(recommend);
+        List<RecommendWIthFundVo> list = recommendFundService.findByGrade("1");
+        System.out.println(list.get(0).getFundName());
     }
 
     @Test

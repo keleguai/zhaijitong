@@ -8,7 +8,7 @@
         <id column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
-        <result column="sell_time" jdbcType="DATE" property="sellTime"/>
+        <result column="sell_time" jdbcType="TIMESTAMP" property="sellTime"/>
         <result column="sell_share" jdbcType="REAL" property="sellShare"/>
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
@@ -20,7 +20,7 @@
         <id column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
-        <result column="sell_time" jdbcType="DATE" property="sellTime"/>
+        <result column="sell_time" jdbcType="TIMESTAMP" property="sellTime"/>
         <result column="sell_share" jdbcType="REAL" property="sellShare"/>
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
@@ -38,7 +38,7 @@
         <id column="order_id" jdbcType="INTEGER" property="orderId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
-        <result column="sell_time" jdbcType="DATE" property="sellTime"/>
+        <result column="sell_time" jdbcType="TIMESTAMP" property="sellTime"/>
         <result column="sell_share" jdbcType="REAL" property="sellShare"/>
         <result column="sure_net" jdbcType="REAL" property="sureNet"/>
         <result column="service_charge" jdbcType="REAL" property="serviceCharge"/>
