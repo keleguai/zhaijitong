@@ -7,7 +7,7 @@ import cn.edu.neu.School_Jobs.vo.LikePeopleJoinUserInfoVo;
 import java.util.List;
 
 /**
- * Created by zzc on 2019/06/19.
+ * Created by fzb on 2019/06/19.
  */
 public interface LikePeopleService extends Service<LikePeople> {
 }

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  *
- * Created by zzc on 2019/06/05.
+ * Created by fzb on 2019/06/05.
  */
 public interface FixedFundService extends Service<FixedFund> {
     List<FixedFundJoinFundVo> findByUserId(String userId);

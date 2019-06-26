@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * Created by zzc on 2019/06/13.
+ * Created by fzb on 2019/06/13.
  */
 public interface FriendService extends Service<Friend> {
     int findHasSend(String userId, String friendId);

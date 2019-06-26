@@ -36,13 +36,7 @@ public class BuyOrderController {
     private RedisServer redisServer;
 
 
-    @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
-    public JSONObject findBuyOrder(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "pageSize") int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<BuyOrder> list = buyOrderService.findAll();
-        PageInfo pageInfo = new PageInfo(list);
-        return CommonUtil.successJson(pageInfo);
-    }
+
 
 
     @PostMapping("/add")
@@ -112,7 +106,7 @@ public class BuyOrderController {
     public JSONObject show_has_funds(HttpServletRequest request, @PathVariable(value = "page") int page) {
         int userId = Jwt.getUserId(request);
         // 分页器
-        PageHelper.startPage(page, 5);
+        PageHelper.startPage(page, 20);
         // 得到该客户的基金资料
         List<BuyOrderJoinHistoryFundJoinFundVo> buyOrderJoinHistoryFundJoinFundVos = buyOrderService.findAllHasBuyFund(userId);
         // 设置客户昨日总收益为0
@@ -206,12 +200,6 @@ public class BuyOrderController {
         }
         BuyOrder buyOrder = JSONObject.toJavaObject(requestJson, BuyOrder.class);
         buyOrderService.update(buyOrder);
-        return CommonUtil.successJson();
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public JSONObject deleteBuyOrder(@PathVariable(value = "id") int id) {
-        buyOrderService.deleteById(id);
         return CommonUtil.successJson();
     }
 

@@ -37,6 +37,8 @@ public class FundController {
     SellOrderService sellOrderService;
     @Autowired
     UserInfoService userInfoService;
+    @Autowired
+    RedisServer redisServer;
 
 
     @RequestMapping(value = "/general/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
@@ -135,6 +137,7 @@ public class FundController {
     public JSONObject fund_regex(@PathVariable(value = "pageNum") int pageNum, HttpServletRequest request) {
         PageHelper.startPage(pageNum, 12);
         List<Fund> list = fundService.selectByAll(request.getParameter("regex"));
+
         PageInfo pageInfo = new PageInfo(list);
         return CommonUtil.successJson(pageInfo);
     }

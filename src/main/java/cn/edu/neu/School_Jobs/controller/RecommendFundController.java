@@ -20,7 +20,7 @@ import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by zzc on 2019/06/20.
+ * Created by fzb on 2019/06/20.
  */
 @RestController
 @RequestMapping("/recommend_fund")

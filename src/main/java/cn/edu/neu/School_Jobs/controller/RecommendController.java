@@ -15,7 +15,7 @@ import cn.edu.neu.School_Jobs.util.CommonUtil;
 import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
 
 /**
- * Created by zzc on 2019/06/18.
+ * Created by fzb on 2019/06/18.
  */
 @RestController
 @RequestMapping("/recommend")

@@ -19,7 +19,7 @@ import cn.edu.neu.School_Jobs.conf.exception.CommonJsonException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by zzc on 2019/06/19.
+ * Created by fzb on 2019/06/19.
  */
 @RestController
 @RequestMapping("/like_people")

@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * Created by zzc on 2019/06/05.
+ * Created by fzb on 2019/06/05.
  */
 @Service
 public class FixedFundServiceImpl extends AbstractService<FixedFund> implements FixedFundService {

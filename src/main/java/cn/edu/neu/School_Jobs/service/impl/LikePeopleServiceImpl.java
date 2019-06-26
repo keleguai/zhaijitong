@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * Created by zzc on 2019/06/19.
+ * Created by fzb on 2019/06/19.
  */
 @Service
 public class LikePeopleServiceImpl extends AbstractService<LikePeople> implements LikePeopleService {

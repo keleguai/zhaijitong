@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  *
- * Created by zzc on 2019/06/13.
+ * Created by fzb on 2019/06/13.
  */
 @Service
 public class FriendServiceImpl extends AbstractService<Friend> implements FriendService {

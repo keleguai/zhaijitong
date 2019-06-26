@@ -108,7 +108,7 @@ public class UserInfoController {
             // 由身份证获取性别
             userInfo.setSex(userInfoService.computeSex(userInfo.getIdentityCard()));
         }
-        userInfo.setPhotoUrl("/static/" + photoUrl);
+        userInfo.setPhotoUrl("/static/user/" + photoUrl);
         userInfo.setUserId(Jwt.getUserId(request));
         userInfoService.update(userInfo);
         return CommonUtil.successJson();

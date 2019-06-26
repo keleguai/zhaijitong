@@ -8,7 +8,7 @@ import cn.edu.neu.School_Jobs.vo.RecommendWIthFundVo;
 import java.util.List;
 
 /**
- * Created by zzc on 2019/06/20.
+ * Created by fzb on 2019/06/20.
  */
 public interface RecommendFundService extends Service<RecommendFund> {
     List<RecommendWIthFundVo> findByGrade(String userId);

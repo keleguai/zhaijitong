@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * Created by zzc on 2019/06/18.
+ * Created by fzb on 2019/06/18.
  */
 @Service
 public class RecommendServiceImpl extends AbstractService<Recommend> implements RecommendService {

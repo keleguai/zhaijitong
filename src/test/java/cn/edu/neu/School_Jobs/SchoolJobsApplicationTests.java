@@ -5,6 +5,7 @@ import cn.edu.neu.School_Jobs.model.UserInfo;
 import cn.edu.neu.School_Jobs.service.*;
 import cn.edu.neu.School_Jobs.util.Encryptor;
 import cn.edu.neu.School_Jobs.util.Jwt;
+import cn.edu.neu.School_Jobs.util.constants.Constants;
 import cn.edu.neu.School_Jobs.vo.RecommendWIthFundVo;
 import com.alibaba.fastjson.JSONObject;
 import com.nimbusds.jose.JWSObject;
@@ -19,6 +20,7 @@ import redis.clients.jedis.Jedis;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +41,8 @@ public class SchoolJobsApplicationTests {
     private RecommendService recommendService;
     @Autowired
     private RecommendFundService recommendFundService;
+    @Autowired
+    private UserDayGetService userDayGetService;
     @Test
     public void contextLoads() throws ParseException {
 //        Jedis jedis = new Jedis("localhost");
@@ -72,8 +76,16 @@ public class SchoolJobsApplicationTests {
 //        }
 //        Recommend recommend = new Recommend();
 //        recommendService.save(recommend);
-        List<RecommendWIthFundVo> list = recommendFundService.findByGrade("1");
-        System.out.println(list.get(0).getFundName());
+//        List<RecommendWIthFundVo> list = recommendFundService.findByGrade("1");
+//        System.out.println(list.get(0).getFundName());
+//        Map<String, Object> payload = new HashMap<String, Object>();
+//        Date date = new Date();
+//        payload.put("userId", 1);//用户ID
+//        payload.put("startTime", date.getTime());//生成时间
+//        payload.put("expiryTime", date.getTime() + Constants.EXPIRY_TIME);//过期时间1小时
+//        payload.put("type",0);
+//        String token = Jwt.createToken(payload);
+//        userDayGetService.findByTimeAgo("1","2",null);
     }
 
     @Test
