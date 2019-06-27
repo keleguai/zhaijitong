@@ -50,6 +50,21 @@ public class FundController {
     }
 
 
+    @GetMapping("/general/hot/rank")
+    public JSONObject getHotFunds() {
+        List<String> funds = redisServer.getL("hotFunds");
+        JSONArray jsonArray = new JSONArray();
+        for (String fundName : funds) {
+
+            String[] fundsInfo = fundName.split("-");
+            System.out.println(fundName + "啊啊啊" + fundsInfo + fundsInfo[0]);
+            Fund fund = fundService.findById(fundsInfo[0]);
+            fund.setPriority(Integer.parseInt(fundsInfo[1]));
+            jsonArray.add(fund);
+        }
+        return CommonUtil.successJson(jsonArray);
+    }
+
     //仅展示前十名
     @RequestMapping(value = "/general/rank/user/{day}", method = RequestMethod.GET)
     public JSONObject showUser(@PathVariable(value = "day") int day) {
@@ -62,7 +77,7 @@ public class FundController {
         // 遍历每个用户
         for (UserInfo user : users) {
             // 如果客户不愿意展示自己的排名,就跳过这位老哥
-            if (user.getShowMe()==null||!user.getShowMe()) {
+            if (user.getShowMe() == null || !user.getShowMe()) {
                 continue;
             }
             // 得到用户id
@@ -72,7 +87,7 @@ public class FundController {
             Float rate = userInfoService.getHistoryRate(userId, day);
             // 放入客户的收益率以及客户信息
             userInfoWithRate.put("getRate", rate);
-            user.setPhotoUrl(user.getPhotoUrl()+"?t=t"+new Date().getTime());
+            user.setPhotoUrl(user.getPhotoUrl() + "?t=t" + new Date().getTime());
             userInfoWithRate.put("userInfo", user);
             // 放入Array中
             jsonArray.add(userInfoWithRate);
@@ -107,6 +122,7 @@ public class FundController {
     // 通过id取得基金信息
     @RequestMapping(value = "/general/{id}", method = RequestMethod.GET)
     public JSONObject fund_id(@PathVariable(value = "id") String id) {
+        redisServer.lpush("funds", id);
         return CommonUtil.successJson(fundService.findById(id));
     }
 
@@ -128,7 +144,7 @@ public class FundController {
     @RequestMapping(value = "/general/type/{pageNum}/{type}", method = RequestMethod.GET)
     public JSONObject fund_type(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "type") String type) {
         PageHelper.startPage(pageNum, 12);
-        List<Fund> list = fundService.selectByField(type,null);
+        List<Fund> list = fundService.selectByField(type, null);
         PageInfo pageInfo = new PageInfo(list);
         return CommonUtil.successJson(pageInfo);
     }
@@ -157,11 +173,11 @@ public class FundController {
     }
 
     @PostMapping("/update")
-    public JSONObject updateFund(@RequestBody JSONObject requestJson,HttpServletRequest request) {
+    public JSONObject updateFund(@RequestBody JSONObject requestJson, HttpServletRequest request) {
         int userId = Jwt.getUserId(request);
         Fund fund = JSONObject.toJavaObject(requestJson, Fund.class);
         // 对于更新基金的行为做一下验证，验证是否是管理员
-        if(userService.findById(userId).getUserType()==1){
+        if (userService.findById(userId).getUserType() == 1) {
             fundService.update(fund);
             return CommonUtil.successJson();
         }

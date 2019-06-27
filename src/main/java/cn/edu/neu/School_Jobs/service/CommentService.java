@@ -14,4 +14,6 @@ public interface CommentService extends Service<Comment> {
     int findNoReadCount(String userId,String isRead);
 
     List<CommentWithUserInfo> findFriendChat(String userId, String friendId);
+
+    List<Comment> findDayHappy(String userId, String day);
 }

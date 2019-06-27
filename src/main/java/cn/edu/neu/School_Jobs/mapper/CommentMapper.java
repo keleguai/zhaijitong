@@ -12,4 +12,6 @@ public interface CommentMapper extends MyMapper<Comment> {
     int findNoReadCount(JSONObject jsonObject);
 
     List<CommentWithUserInfo> findFriendChat(JSONObject jsonObject);
+
+    List<Comment> findDayHappy(JSONObject jsonObject);
 }

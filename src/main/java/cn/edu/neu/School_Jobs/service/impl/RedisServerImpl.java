@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
+
 /**
  * Created by fzb on 2019/6/11
  */
@@ -28,6 +30,16 @@ public class RedisServerImpl implements RedisServer {
         return true;
     }
 
+    @Override
+    public Boolean lpush(String arrayName, String value) {
+        jedis.lpush(arrayName, value);
+        return true;
+    }
+
+    @Override
+    public List<String> getL(String Name) {
+        return jedis.lrange(Name, 0, jedis.llen(Name));
+    }
     @Override
     public JSONObject get(String key) {
         return JSONObject.parseObject(jedis.get(key));

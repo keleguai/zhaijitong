@@ -27,6 +27,16 @@ public class CommentController {
     CommentService commentService;
 
 
+    @PostMapping("/get/self")
+    public JSONObject getHappyDay(HttpServletRequest request, @RequestBody JSONObject requestJson) {
+        int userId = Jwt.getUserId(request);
+        String day = requestJson.getString("day");
+        if (requestJson.getString("flag") != null) {
+            return CommonUtil.successJson(commentService.findDayHappy(null, day));
+        }
+        return CommonUtil.successJson(commentService.findDayHappy(String.valueOf(userId), day));
+    }
+
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.GET)
     public JSONObject findComment(@PathVariable(value = "pageNum") int pageNum, @PathVariable(value = "pageSize") int pageSize) {
 

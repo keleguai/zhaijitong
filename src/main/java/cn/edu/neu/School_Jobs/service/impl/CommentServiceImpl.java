@@ -48,4 +48,12 @@ public class CommentServiceImpl extends AbstractService<Comment> implements Comm
         return commentMapper.findFriendChat(jsonObject);
     }
 
+    @Override
+    public List<Comment> findDayHappy(String userId, String day) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("day", day);
+        jsonObject.put("userId", userId);
+        return commentMapper.findDayHappy(jsonObject);
+    }
+
 }

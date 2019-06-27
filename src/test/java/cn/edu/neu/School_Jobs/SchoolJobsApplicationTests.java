@@ -34,6 +34,8 @@ public class SchoolJobsApplicationTests {
     @Autowired
     private ScoreService scoreService;
     @Autowired
+    private CommentService commentService;
+    @Autowired
     private Jedis jedis;
     @Autowired
     private UserInfoService userInfoService;
@@ -86,6 +88,7 @@ public class SchoolJobsApplicationTests {
 //        payload.put("type",0);
 //        String token = Jwt.createToken(payload);
 //        userDayGetService.findByTimeAgo("1","2",null);
+        System.out.println(commentService.findDayHappy("1", "7"));
     }
 
     @Test

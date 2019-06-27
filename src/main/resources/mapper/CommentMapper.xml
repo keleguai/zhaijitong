@@ -1,88 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.neu.School_Jobs.mapper.CommentMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.Comment">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="fund_id" jdbcType="VARCHAR" property="fundId" />
-    <result column="manager_id" jdbcType="INTEGER" property="managerId" />
-    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
-    <result column="reply_id" jdbcType="INTEGER" property="replyId" />
-    <result column="text" jdbcType="LONGVARCHAR" property="text" />
-    <result column="reply_content" jdbcType="VARCHAR" property="replyContent" />
-    <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId" />
-    <result column="rank_id" jdbcType="INTEGER" property="rankId" />
-    <result column="is_read" jdbcType="BIT" property="isRead"/>
-  </resultMap>
+    <resultMap id="BaseResultMap" type="cn.edu.neu.School_Jobs.model.Comment">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="manager_id" jdbcType="INTEGER" property="managerId"/>
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+        <result column="reply_id" jdbcType="INTEGER" property="replyId"/>
+        <result column="text" jdbcType="LONGVARCHAR" property="text"/>
+        <result column="reply_content" jdbcType="VARCHAR" property="replyContent"/>
+        <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId"/>
+        <result column="rank_id" jdbcType="INTEGER" property="rankId"/>
+        <result column="is_read" jdbcType="BIT" property="isRead"/>
+    </resultMap>
 
-  <resultMap id="CommentWithUserInfo" type="cn.edu.neu.School_Jobs.vo.CommentWithUserInfo">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
-    <result column="fund_id" jdbcType="VARCHAR" property="fundId" />
-    <result column="manager_id" jdbcType="INTEGER" property="managerId" />
-    <result column="rank_id" jdbcType="INTEGER" property="rankId" />
-    <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime" />
-    <result column="reply_id" jdbcType="INTEGER" property="replyId" />
-    <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId" />
-    <result column="text" jdbcType="LONGVARCHAR" property="text" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
-    <result column="question_result" jdbcType="VARCHAR" property="questionResult"/>
-    <result column="age" jdbcType="INTEGER" property="age"/>
-    <result column="sex" jdbcType="VARCHAR" property="sex"/>
-    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
-    <result column="identity_card" jdbcType="VARCHAR" property="identityCard"/>
-    <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber"/>
-    <result column="pay_password" jdbcType="VARCHAR" property="payPassword"/>
-    <result column="name" jdbcType="VARCHAR" property="name"/>
-    <result column="autograph" jdbcType="VARCHAR" property="autograph"/>
-    <result column="show_me" jdbcType="BIT" property="showMe"/>
-    <result column="reply_content" jdbcType="VARCHAR" property="replyContent" />
-    <result column="is_read" jdbcType="BIT" property="isRead"/>
-  </resultMap>
+    <resultMap id="CommentWithUserInfo" type="cn.edu.neu.School_Jobs.vo.CommentWithUserInfo">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="fund_id" jdbcType="VARCHAR" property="fundId"/>
+        <result column="manager_id" jdbcType="INTEGER" property="managerId"/>
+        <result column="rank_id" jdbcType="INTEGER" property="rankId"/>
+        <result column="insert_time" jdbcType="TIMESTAMP" property="insertTime"/>
+        <result column="reply_id" jdbcType="INTEGER" property="replyId"/>
+        <result column="reply_user_id" jdbcType="INTEGER" property="replyUserId"/>
+        <result column="text" jdbcType="LONGVARCHAR" property="text"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="question_result" jdbcType="VARCHAR" property="questionResult"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="photo_url" jdbcType="VARCHAR" property="photoUrl"/>
+        <result column="identity_card" jdbcType="VARCHAR" property="identityCard"/>
+        <result column="bank_card_number" jdbcType="VARCHAR" property="bankCardNumber"/>
+        <result column="pay_password" jdbcType="VARCHAR" property="payPassword"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="autograph" jdbcType="VARCHAR" property="autograph"/>
+        <result column="show_me" jdbcType="BIT" property="showMe"/>
+        <result column="reply_content" jdbcType="VARCHAR" property="replyContent"/>
+        <result column="is_read" jdbcType="BIT" property="isRead"/>
+    </resultMap>
 
-  <select id="findUserInfoWithCommentByField" resultMap="CommentWithUserInfo" parameterType="com.alibaba.fastjson.JSONObject">
-    SELECT * FROM
-    comment
-    left join user_info
-    on user_info.user_id=comment.user_id
-    <where>
-      <if test="fundId!=null">
-        fund_id = #{fundId}
-      </if>
-      <if test="managerId!=null">
-        manager_id = #{managerId}
-      </if>
-      <if test="rankId!=null">
-        rank_id = #{rankId}
-      </if>
-      <if test="userId!=null">
-        reply_user_id = #{userId}
-      </if>
-      <if test="isRead!=null">
-        AND is_read = #{isRead}
-      </if>
-    </where>
-    order by insert_time DESC
-  </select>
+    <select id="findUserInfoWithCommentByField" resultMap="CommentWithUserInfo"
+            parameterType="com.alibaba.fastjson.JSONObject">
+        SELECT * FROM
+        comment
+        left join user_info
+        on user_info.user_id=comment.user_id
+        <where>
+            <if test="fundId!=null">
+                fund_id = #{fundId}
+            </if>
+            <if test="managerId!=null">
+                manager_id = #{managerId}
+            </if>
+            <if test="rankId!=null">
+                rank_id = #{rankId}
+            </if>
+            <if test="userId!=null">
+                reply_user_id = #{userId}
+            </if>
+            <if test="isRead!=null">
+                AND is_read = #{isRead}
+            </if>
+        </where>
+        order by insert_time DESC
+    </select>
 
-  <select id="findNoReadCount" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
-    SELECT COUNT(*)
-    FROM comment
-    <where>
-      <if test="userId!=null">
-        reply_user_id = #{userId}
-      </if>
-      <if test="isRead!=null">
-        AND is_read = #{isRead}
-      </if>
-    </where>
-  </select>
+    <select id="findNoReadCount" parameterType="com.alibaba.fastjson.JSONObject" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM comment
+        <where>
+            <if test="userId!=null">
+                reply_user_id = #{userId}
+            </if>
+            <if test="isRead!=null">
+                AND is_read = #{isRead}
+            </if>
+        </where>
+    </select>
 
     <select id="findFriendChat" parameterType="com.alibaba.fastjson.JSONObject" resultMap="CommentWithUserInfo">
     SELECT * FROM
@@ -94,4 +95,15 @@
     (comment.user_id=#{friendId} and reply_user_id=#{userId})
     order by insert_time desc
   </select>
+
+    <select id="findDayHappy" parameterType="com.alibaba.fastjson.JSONObject" resultMap="BaseResultMap">
+        SELECT * FROM comment
+        <where>
+            DATE_SUB(CURDATE(), INTERVAL #{day} DAY) &lt;= insert_time
+            <if test="userId!=null">
+                AND user_id = #{userId}
+            </if>
+        </where>
+        order by insert_time
+    </select>
 </mapper>
